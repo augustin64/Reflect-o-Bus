@@ -1,0 +1,3 @@
+[submodule "rtm"]
+	path = rtm
+	url = https://github.com/augustin64/rtm-api-marseille.git
