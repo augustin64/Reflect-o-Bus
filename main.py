@@ -75,7 +75,6 @@ def get_schedules(config):
     midnight = now.replace(hour=0, minute=0, second=0, microsecond=0)
     seconds = (now - midnight).seconds
 
-
     for i in config.categories :
         for j in config.lines :
             if j['category'] == i :
