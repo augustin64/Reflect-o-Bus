@@ -1,6 +1,9 @@
 from rtm import rtm
 import configparser
 import time
+import datetime
+
+
 
 configParser = configparser.ConfigParser()
 
@@ -43,7 +46,7 @@ class Configuration():
         for i in range(len(self.lines)):
             k = i - delete_range
             routes = [ j for j in self.lines[k]['line'].routes if j.DirectionStationsSqli == self.lines[k]['direction']]
-            if len(routes) == 0:
+            if len(routes) == 0 :
                 print("Can't find satisfying route for "+self.lines[k]['publiccode']+", removing it")
                 self.lines.remove(self.lines[k])
                 delete_range += 1
@@ -68,6 +71,10 @@ class Configuration():
 
 def get_schedules(config):
     schedules = {}
+    now = datetime.datetime.now()
+    midnight = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    seconds = (now - midnight).seconds
+
 
     for i in config.categories :
         for j in config.lines :
@@ -77,8 +84,9 @@ def get_schedules(config):
                 else :
                     schedules[i] = [ (j['line'],k) for k in j['stop'].get_schedule() ]
 
-        schedules[i] = [(j[0],j[1].TheoricArrivalTime) for j in schedules[i] if j[1].TheoricArrivalTime != None]
-        schedules[i] = sorted(schedules[i], key=lambda tup:(tup[1], tup[0]))[:config.schedules_by_category]
+        if i in schedules.keys() :
+            schedules[i] = [(j[0],j[1].TheoricDepartureTime) for j in schedules[i] if j[1].TheoricDepartureTime != None and j[1].TheoricDepartureTime > seconds//60]
+            schedules[i] = sorted(schedules[i], key=lambda tup:(tup[1], tup[0]))[:config.schedules_by_category]
 
     return schedules
 

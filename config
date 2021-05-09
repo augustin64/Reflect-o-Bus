@@ -1,6 +1,6 @@
 [DEFAULT]
 refresh = 60
-schedules = 7_foch 7T_foch 7_3lucs
+schedules = 7_foch 7T_foch
 
 default_category = Autre
 schedules_by_category = 3
@@ -12,12 +12,6 @@ publiccode = 7
 direction = Foch 5 Avenues
 stop = Les 3 Lucs Maroc
 category = Direction Chevreul
-
-[schedule/7_3lucs]
-publiccode = 7
-direction = Les 3 Lucs Enco de Botte
-stop = Les 3 Lucs Maroc
-category = Direction Les 3 Lucs
 
 [schedule/7T_foch]
 publiccode = 7T
