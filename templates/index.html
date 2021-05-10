@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MagicMirror RTM</title>
+        <meta charset="UTF-8">
+        <link href="{{ url_for('static',filename='styles/main.css') }}" rel="stylesheet">
+    </head>
+    <body>
+      <section>
+        {% for n in data.keys() %}
+            <h3>{{ n }}</h3>
+            {% for schedules in data[n] %}
+              <div id="squircle" style="background-color: {{ schedules[0].color }};">
+                <p>{{ schedules[0].PublicCode }}</p>
+              </div>
+              {{ schedules[1] }}min
+            {% endfor %}
+        {% endfor %}
+        
+      </section>
+    </body>
+
+    
+</html>

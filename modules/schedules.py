@@ -1,9 +1,8 @@
-from rtm import rtm
 import configparser
-import time
 import datetime
+import time
 
-
+from modules.rtm import rtm
 
 configParser = configparser.ConfigParser()
 
@@ -84,25 +83,18 @@ def get_schedules(config):
                     schedules[i] = [ (j['line'],k) for k in j['stop'].get_schedule() ]
 
         if i in schedules.keys() :
-            schedules[i] = [(j[0],j[1].TheoricDepartureTime) for j in schedules[i] if j[1].TheoricDepartureTime != None and j[1].TheoricDepartureTime > seconds//60]
+            schedules[i] = [(j[0],j[1].TheoricDepartureTime-seconds//60) for j in schedules[i] if j[1].TheoricDepartureTime != None and j[1].TheoricDepartureTime > seconds//60]
             schedules[i] = sorted(schedules[i], key=lambda tup:(tup[1], tup[0]))[:config.schedules_by_category]
 
     return schedules
 
 
 
-class Main():
+class Schedules():
     def __init__(self):
         self.config = Configuration()
         self.config.update()
 
     def __main__(self):
-        while True :
-            schedules = get_schedules(self.config)
-            print((schedules))
-            exit()
-            time.sleep(self.config.refresh)
-
-
-    
-Main().__main__()
+        schedules = get_schedules(self.config)
+        return schedules

@@ -1,0 +1,32 @@
+#squircle {
+    position:relative;
+    margin:.333rem .25rem;
+    border-radius:.75rem;
+    color:#fff;
+    text-decoration:none;
+    text-align:center;
+    line-height:3rem;
+    width:3rem;
+    height:3rem;
+    font-size:2rem;
+    transition:color .333s;
+}
+#squircle::after {
+      font-family:'fontawesome', sans-serif;
+      font-size:1.25rem;
+}
+    
+#squircle::before {
+      position:absolute;
+      left:5px;
+      right:5px;
+      top:5px;
+      bottom:5px;
+      border-radius:.6875rem;
+      content:'';
+}
+
+:root {
+    background-color: black;
+    color:#fff;
+}
