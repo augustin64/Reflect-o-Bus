@@ -3,7 +3,7 @@ refresh = 60
 schedules = 7_foch 7T_foch 6_antoine 9_caillols
 
 default_category = Autre
-schedules_by_category = 6
+schedules_by_category = 3
 
 pass_colors = True
 
@@ -17,11 +17,12 @@ category = Direction Chevreul
 publiccode = 7T
 direction = Foch 5 Avenues
 stop = Les 3 Lucs Maroc
+category = Direction Chevreul
 
-[schedule/6_antoine]
+[schedule/6_5av]
 publiccode = 6
-direction = Bois Lemaître
-stop = Duparc Blancarde
+direction = Foch 5 Avenues
+stop = Bois Lemaître
 
 [schedule/9_caillols]
 publiccode = 9
