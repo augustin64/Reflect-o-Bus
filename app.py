@@ -23,7 +23,10 @@ def home():
 def get():
     return ""
 
-
+@app.route("/config")
+def config():
+    # Planning to add some in-browser config
+    return ("To implement")
 
 if __name__ == "__main__":
     app.run(debug = False)
