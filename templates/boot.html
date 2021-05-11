@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MagicMirror RTM - boot</title>
+        <meta charset="UTF-8">
+        <link href="{{ url_for('static',filename='styles/mirror.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static',filename='styles/main.css') }}" rel="stylesheet">
+    </head>
+    <body style="text-align: center;">
+      version: {{ data["version"][:5] }} <br/>
+      RTM API version: {{ data["rtm_version"][:5] }} <br/>
+      Adresse IP : <br/>
+    </body>
+
+    <script>
+      setTimeout(() => (document.location = '/horaires'), 5000)
+    </script>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MagicMirror RTM - config</title>
+        <meta charset="UTF-8">
+        <link href="{{ url_for('static',filename='styles/main.css') }}" rel="stylesheet">
+    </head>
+    <body style="text-align: center; background-color:white">
+      <div id="main-config">
+        Nombre d'horaires par catégorie: <input id="schedules-number"><br/>
+        Nom de la catégorie par défaut: <input id="default-category"><br/>
+      </div>
+      <div id="schedules">
+        <button></button>
+      </div>
+      <div id="advanced-config">
+        Temps de rafraîchissement: <input id="refresh-time"><br/>
+        Affichage des horaires en couleur: 
+        <select id="pass-colors">
+          <option value="True">Oui</option>
+          <option value="False">Non</option>
+        </select><br/>
+      </div>
+    </body>
+
+    <script>
+      
+    </script>
+</html>

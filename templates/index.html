@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>MagicMirror RTM</title>
+        <title>MagicMirror RTM - schedules</title>
         <meta charset="UTF-8">
         <link href="{{ url_for('static',filename='styles/main.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static',filename='styles/mirror.css') }}" rel="stylesheet">
     </head>
     <body>
       <section>
         {% for n in data.keys() %}
+        <div>
             <h3>{{ n }}</h3>
             {% for schedules in data[n] %}
               <div id="squircle" style="background-color: {{ schedules[0].color }};">
@@ -15,6 +17,7 @@
               </div>
               {{ schedules[1] }}min
             {% endfor %}
+        </div>
         {% endfor %}
         
       </section>
