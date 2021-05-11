@@ -1,14 +1,18 @@
 import configparser
 import datetime
 import time
+from pathlib import Path, PurePath
 
 from modules.rtm import rtm
+
+home = str(Path.home())
+configpath = PurePath(home).joinpath('.config/rtm-api/config')
 
 configParser = configparser.ConfigParser()
 
 class Configuration():
     def __init__(self):
-        configParser.read('config')
+        configParser.read(configpath)
         self.refresh = int(configParser['DEFAULT']['refresh'])
         self.schedules = configParser['DEFAULT']['schedules'].split(' ')
         schedules = [ i.split('/')[1] for i in configParser.sections() if i.split('/')[0] == 'schedule' and i.split('/')[1] in self.schedules ]
