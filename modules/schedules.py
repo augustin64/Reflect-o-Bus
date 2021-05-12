@@ -1,18 +1,25 @@
 import configparser
 import datetime
 import time
+import os
+import shutil
 from pathlib import Path, PurePath
 
 from modules.rtm import rtm
 
 home = str(Path.home())
-configpath = PurePath(home).joinpath('.config/rtm-api/config')
+configpath = PurePath(home).joinpath('.config/rtm-api/')
 
 configParser = configparser.ConfigParser()
 
+if not os.path.isfile(configpath.joinpath('config')) :
+    os.makedirs(configpath, exist_ok=True)
+    shutil.copy('./examples/default',configpath.joinpath('config'))
+
+
 class Configuration():
     def __init__(self):
-        configParser.read(configpath)
+        configParser.read(configpath.joinpath('config'))
         self.refresh = int(configParser['DEFAULT']['refresh'])
         self.schedules = configParser['DEFAULT']['schedules'].split(' ')
         schedules = [ i.split('/')[1] for i in configParser.sections() if i.split('/')[0] == 'schedule' and i.split('/')[1] in self.schedules ]
@@ -43,12 +50,13 @@ class Configuration():
         for i in range(len(self.lines)) :
             self.lines[i]['line'] = (rtm.Line({'PublicCode':self.lines[i]['publiccode']}))
 
-        [i['line'].get_routes() for i in self.lines]
+        for i in self.lines :
+            i['line'].get_routes()
         # On récupère les arrêts qui nous intéressent
         delete_range = 0
         for i in range(len(self.lines)):
             k = i - delete_range
-            routes = [ j for j in self.lines[k]['line'].routes if j.DirectionStationsSqli == self.lines[k]['direction']]
+            routes = [ j for j in self.lines[k]['line'].routes if j.DirectionStations == self.lines[k]['direction']]
             if len(routes) == 0 :
                 print("Can't find satisfying route for "+self.lines[k]['publiccode']+", removing it")
                 self.lines.remove(self.lines[k])
@@ -74,6 +82,7 @@ class Configuration():
 
 def get_schedules(config):
     schedules = {}
+    # On récupère l'horaire actuel en minutes à compter de minuit
     now = datetime.datetime.now()
     midnight = now.replace(hour=0, minute=0, second=0, microsecond=0)
     seconds = (now - midnight).seconds

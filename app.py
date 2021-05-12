@@ -40,12 +40,6 @@ def boot():
 @app.route("/horaires")
 def horaires():
     # fetching parsed data
-    try :
-        if schedules_object == None :
-            schedules_object = schedules.Schedules()
-    except:
-        schedules_object = schedules.Schedules()
-
     sc = schedules_object.__main__()
     return render_template('index.html',data=sc)
 
