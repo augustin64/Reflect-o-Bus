@@ -1,25 +1,29 @@
+import configparser
+from pathlib import Path, PurePath
+
 from flask import (Flask, make_response, redirect, render_template, request,
                    url_for)
 
 from modules import schedules
-from pathlib import Path, PurePath
-
 from modules.rtm import rtm
 
+# importing config file
+# created by schedules submodule if empty
 home = str(Path.home())
-configpath = PurePath(home).joinpath('.config/rtm-api/config')
+configpath = PurePath(home).joinpath('.config/rtm-api/')
+
+configParser = configparser.ConfigParser()
+configParser.read(configpath.joinpath('config'))
 
 # initializing app
 app = Flask(__name__)
 # setting custom headers
 headers = {'User-Agent':'MagicMirror rtm Client', 'From':'https://github.com/augustin64/MagicMirror-rtm'}
 # Initializing schedules
-try :
-    schedules_object = schedules.Schedules()
-    print(" * Schedules Initialized")
-except :
-    schedules_object = None
-    print(" * Running offline mode")
+
+schedules_object = schedules.Schedules()
+print(" * Schedules Initialized")
+
 
 # get apps versions :
 with open('./.git/refs/heads/main','r') as f:
@@ -33,7 +37,8 @@ with open('./.git/modules/rtm/refs/heads/main','r') as f:
 @app.route("/")
 def boot():
     data = {"version":ver,
-            "rtm_version":rtm_ver
+            "rtm_version":rtm_ver,
+            "boot_time":configParser['ADVANCED']['boot_time']
             }
     return render_template('boot.html', data=data)
 

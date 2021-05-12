@@ -20,13 +20,13 @@ if not os.path.isfile(configpath.joinpath('config')) :
 class Configuration():
     def __init__(self):
         configParser.read(configpath.joinpath('config'))
-        self.refresh = int(configParser['DEFAULT']['refresh'])
         self.schedules = configParser['DEFAULT']['schedules'].split(' ')
         schedules = [ i.split('/')[1] for i in configParser.sections() if i.split('/')[0] == 'schedule' and i.split('/')[1] in self.schedules ]
         self.categories = [configParser['DEFAULT']['default_category']]
         self.schedules_by_category = int(configParser['DEFAULT']['schedules_by_category'])
         self.lines = []
-        self.pass_colors = configParser['DEFAULT']['pass_colors']
+        self.pass_colors = configParser['ADVANCED']['pass_colors']
+        self.line_colors = configParser['ADVANCED']['lines_color']
         for i in schedules:
             temp = {
                 "publiccode":configParser['schedule/'+i]['publiccode'],
@@ -97,7 +97,16 @@ def get_schedules(config):
 
         if i in schedules.keys() :
             schedules[i] = [(j[0],j[1].TheoricDepartureTime-seconds//60) for j in schedules[i] if j[1].TheoricDepartureTime != None and j[1].TheoricDepartureTime > seconds//60]
+            # On trie les horaires en fonction de leur horaire et on en garde le nombre défini
             schedules[i] = sorted(schedules[i], key=lambda tup:(tup[1], tup[0]))[:config.schedules_by_category]
+            # Si les couleurs ne doivent pas être passées d'après le fichier de configuration,
+            # on remplace alors leur couleur par une couleur unie, définie das le fichier de configuration
+            if config.pass_colors != 'True' :
+                for j in schedules[i]:
+                    item = j[0]
+                    item.color = config.line_colors
+                    j = (item,j[1])
+                    
 
     return schedules
 
