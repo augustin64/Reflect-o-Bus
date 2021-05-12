@@ -1,0 +1,8 @@
+[DEFAULT]
+refresh = 60
+schedules = 
+
+default_category = Autres
+schedules_by_category = 3
+
+pass_colors = True
