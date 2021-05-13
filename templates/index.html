@@ -5,13 +5,14 @@
         <meta charset="UTF-8">
         <link href="{{ url_for('static',filename='styles/main.css') }}" rel="stylesheet">
         <link href="{{ url_for('static',filename='styles/mirror.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static',filename='styles/main.css') }}" rel="stylesheet">
     </head>
     <body>
-      <section>
-        {% for n in data.keys() %}
-        <div>
+      <section style="padding-left:5%;">
+        {% for n in data['schedule'].keys() %}
+        <div class="schedule" style="width:{{ 90 // data['schedule']|length }}%;">
             <h3>{{ n }}</h3>
-            {% for schedules in data[n] %}
+            {% for schedules in data['schedule'][n] %}
               <div id="squircle" style="background-color: {{ schedules[0].color }};">
                 <p>{{ schedules[0].PublicCode }}</p>
               </div>

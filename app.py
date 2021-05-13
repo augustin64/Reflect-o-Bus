@@ -44,14 +44,23 @@ def boot():
 
 @app.route("/horaires")
 def horaires():
+    data={}
     # fetching parsed data
-    sc = schedules_object.__main__()
-    return render_template('index.html',data=sc)
+    data['schedule'] = schedules_object.__main__()
+    return render_template('index.html',data=data)
 
 # not in use yet
 @app.route('/get')
 def get():
     return ""
+
+# get json posted data
+@app.route('/post', methods = ['POST'])
+def postJsonHandler():
+    if (request.is_json) :
+        content = request.get_json()
+        print(content)
+        return 'JSON posted'
 
 @app.route("/config")
 def config():
