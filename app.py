@@ -21,7 +21,7 @@ app = Flask(__name__)
 headers = {'User-Agent':'MagicMirror rtm Client', 'From':'https://github.com/augustin64/MagicMirror-rtm'}
 # Initializing schedules
 
-schedules_object = schedules.Schedules()
+# schedules_object = schedules.Schedules()
 print(" * Schedules Initialized")
 
 
@@ -52,7 +52,21 @@ def horaires():
 # not in use yet
 @app.route('/get')
 def get():
-    return ""
+    content = request.args.get("content")
+    if content == "config" :
+        cfg = {'DEFAULT':{},'ADVANCED':{}}
+        for i in configParser['DEFAULT'] :
+            cfg['DEFAULT'][i] = configParser['DEFAULT'][i]
+        for i in configParser.sections() :
+            cfg[i] = {}
+            for j in configParser[i] :
+                cfg[i][j] = configParser[i][j]
+
+        return cfg
+            
+
+    else :
+        return "content!=config"
 
 # get json posted data
 @app.route('/post', methods = ['POST'])

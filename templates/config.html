@@ -4,27 +4,30 @@
         <title>MagicMirror RTM - config</title>
         <meta charset="UTF-8">
         <link href="{{ url_for('static',filename='styles/main.css') }}" rel="stylesheet">
-        <link href="{{ url_for('static',filename='styles/main.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static',filename='styles/config.css') }}" rel="stylesheet">
     </head>
     <body style="text-align: center; background-color:white">
       <div id="main-config">
-        Nombre d'horaires par catégorie: <input id="schedules-number"><br/>
-        Nom de la catégorie par défaut: <input id="default-category"><br/>
+        Nombre d'horaires par catégorie: <input id="schedules_by_category"><br/>
+        Nom de la catégorie par défaut: <input id="default_category"><br/>
       </div>
       <div id="schedules">
-        <button></button>
+        <button>Ajouter un horaire</button>
+        <button>Ajouter une catégorie</button>
       </div>
-      <div id="advanced-config">
-        Temps de rafraîchissement: <input id="refresh-time"><br/>
+      <section id="ADVANCED">
+        Temps d'affichage de l'écran de démarrage: <input id="refresh-time"><br/>
         Affichage des horaires en couleur: 
-        <select id="pass-colors">
+        <select id="pass_colors">
           <option value="True">Oui</option>
           <option value="False">Non</option>
         </select><br/>
-      </div>
+        <div id="lines-color" style="display:none;">
+          Couleur de l'affichage des horaires :
+          <input id="lines_color">
+        </div>
+      </section>
     </body>
 
-    <script>
-      
-    </script>
+    <script id="mainScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>
 </html>
