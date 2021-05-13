@@ -25,3 +25,8 @@
       border-radius:.6875rem;
       content:'';
 }
+
+.schedule {
+      display: inline-block;
+      vertical-align: top;
+}
