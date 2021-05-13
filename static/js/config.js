@@ -1,6 +1,36 @@
-var setConfig = function() {
+var getConfig = function() {
   getJSON('get?content=config',
   function(data) {
-    console.log(data)
+    for (var i in data) {
+      if ( i == "DEFAULT" ) {
+        for (var j in data[i]) {
+          document.getElementById(j).value = data[i][j]
+        }
+      } else {
+          if ( i == "ADVANCED" ) {
+            for (var j in data[i]) {
+              document.getElementById(j).value = data[i][j]
+            }
+          }
+        console.log(i);
+        console.log(data[i])
+      }
+    }
   });
+}
+
+var addSchedule = function (id,publicCode,direction,stop,category) {
+  // Adding schedule to html
+  var newSchedule = "<div id='"+id+"'><br/>"
+  newSchedule += "Identifiant du bus <input value='"+publicCode+"'><br/>"
+  newSchedule += "Direction <input value='"+direction+"'><br/>"
+  newSchedule += "Arrêt <input value='"+stop+"'><br/>"
+  newSchedule += "Catégorie <select><option value='category'>"+category+"</option><option value=''>DEFAULT</option></select></div>"
+  document.getElementById('schedules').innerHTML = newSchedule + document.getElementById('schedules').innerHTML
+  // Adding category to categories list
+  // refreshing all categories
+}
+
+var refreshCategories = function () {
+  //Not Implemented
 }

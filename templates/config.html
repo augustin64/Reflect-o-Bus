@@ -26,8 +26,19 @@
           Couleur de l'affichage des horaires :
           <input id="lines_color">
         </div>
+        <div id=background-settings>
+          Type de fond d'écran 
+          <select id="background_type">
+            <option value="color" style="display:none;">Couleur</option>
+            <option value="image" style="display:none;">Image</option>
+          </select><br/>
+          Couleur de fond d'écran <input id="background_color"><br/>
+          URL de l'image de fond <input id="background_url"><br/>
+        </div>
+        Durée de l'écran de démarrage <input id="boot_time"><br/>
       </section>
     </body>
 
     <script id="mainScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>
+    <script id="mainScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/config.js') }}"></script>
 </html>
