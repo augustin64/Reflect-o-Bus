@@ -9,7 +9,7 @@
     <body style="text-align: center;">
       version: {{ data["version"][:5] }} <br/>
       RTM API version: {{ data["rtm_version"][:5] }} <br/>
-      Adresse IP : <br/>
+      Adresse IP : {{ data["local_ip"] }}:5000 <br/>
     </body>
 
     <script id="mainScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>

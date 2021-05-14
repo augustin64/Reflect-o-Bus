@@ -6,6 +6,7 @@ from flask import (Flask, make_response, redirect, render_template, request,
 
 from modules import schedules
 from modules.rtm import rtm
+import socket
 
 # importing config file
 # created by schedules submodule if empty
@@ -21,7 +22,7 @@ app = Flask(__name__)
 headers = {'User-Agent':'MagicMirror rtm Client', 'From':'https://github.com/augustin64/MagicMirror-rtm'}
 # Initializing schedules
 
-schedules_object = schedules.Schedules()
+# schedules_object = schedules.Schedules()
 print(" * Schedules Initialized")
 
 
@@ -36,9 +37,19 @@ with open('./.git/modules/rtm/refs/heads/main','r') as f:
 @app.route("/boot")
 @app.route("/")
 def boot():
+    localip = "127.0.0.1"
+    try :
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        localip = (s.getsockname()[0])
+        s.close()
+    except :
+        print(' * Network unreachable')
+
     data = {"version":ver,
             "rtm_version":rtm_ver,
-            "boot_time":configParser['ADVANCED']['boot_time']
+            "boot_time":configParser['ADVANCED']['boot_time'],
+            "local_ip":localip
             }
     return render_template('boot.html', data=data)
 
