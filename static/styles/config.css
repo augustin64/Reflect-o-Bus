@@ -5,3 +5,18 @@ input {
 .stop  { 
     width: 20%
 }
+
+.direction  { 
+    width: 20%
+}
+
+section {
+    margin-top: 1%;
+    margin-bottom: 1.5%;
+}
+
+:root {
+    margin-left: 25%;
+    text-align: left;
+    background-color: white;
+}
