@@ -10,15 +10,16 @@
 
       <section id="main-config">
         Nombre d'horaires par catégorie: <input id="schedules_by_category"><br/>
-        Nom de la catégorie par défaut: <input id="default_category"><br/>
+        Nom de la catégorie par défaut: <input id="default_category">
       </section>
-
+      
       <section id="schedules">
         <br/>
         <button onclick="userAddSchedule()">Ajouter un horaire</button>
         <button onclick="addCategory()">Ajouter une catégorie</button>
-        <br/>
       </section>
+
+      <br/>
 
       <section id="ADVANCED">
 
@@ -52,7 +53,8 @@
         Durée de l'écran de démarrage <input id="boot_time"><br/>
 
       </section>
-      <button>Mettre à jour la configuration</button>
+      <button onclick="sendConfig()">Mettre à jour la configuration</button>
+      <button onclick="window.location=window.location;">Récupérer la configuration actuelle</button>
     </body>
 
     <script id="mainScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>

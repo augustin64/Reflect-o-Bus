@@ -26,10 +26,11 @@ var getConfig = function() {
 
 var addSchedule = function (id,publicCode,direction,stop,category) {
   // Adding schedule to html
-  var newSchedule = "<div id='"+id+"'><br/>"
-  newSchedule += "Identifiant du bus <input value='"+publicCode+"'><br/>"
+  var newSchedule = "<br/><div id='"+id+"'>"
+  newSchedule += "Identifiant du bus <input class='publiccode' value='"+publicCode+"'><br/>"
   newSchedule += "Direction <input value='"+direction+"' class='direction'><br/>"
   newSchedule += "Arrêt <input class='stop' value='"+stop+"'><br/>"
+  // Setting current category as 1st of the list
   if (typeof category === "undefined") {
     newSchedule += "Catégorie <select class='category'><option value=''>DEFAULT</option></select>"
   } else {
@@ -37,9 +38,9 @@ var addSchedule = function (id,publicCode,direction,stop,category) {
     refreshCategories(category);
   }
   newSchedule += "<button onclick=\"deleteSchedule('"+id+"')\">Supprimer</button></div>"
-  // newSchedule += "<br/>Ligne activée<input type=checkbox checked></div>"
+
   document.getElementById('schedules').innerHTML = newSchedule + document.getElementById('schedules').innerHTML;
-  // Adding category to categories list
+  // Adding category to categories list &
   // refreshing all categories
   refreshCategories(undefined);
 }
@@ -51,7 +52,6 @@ var deleteSchedule = function (id) {
 
 var refreshCategories = function (category) {
   if ((!(category in categories)) && (typeof category != 'undefined')) {
-    console.log(category,typeof category != 'undefined')
     categories.push(category);
   }
   var divs = document.getElementsByClassName('category');
@@ -62,7 +62,7 @@ var refreshCategories = function (category) {
       }
     }
   }
-  //Not Implemented
+
 }
 
 var addCategory = function () {
@@ -96,11 +96,38 @@ var bgChange = function () {
 var linescolorChange = function () {
   var e = document.getElementById('pass_colors');
   var value = e.options[e.selectedIndex].value;
-  if (value == "True") {
-    document.getElementById('lines-color').style.display = "none";
-  } else {
+  if (value == "False") {
     document.getElementById('lines-color').style.display = "inline";
+  } else {
+    document.getElementById('lines-color').style.display = "none";
   }
+}
+
+var sendConfig = function () {
+  var data = {}
+  data['DEFAULT'] = {}
+  data['ADVANCED'] = {}
+  for (var i of document.getElementById('main-config').getElementsByTagName('input')) {
+    data['DEFAULT'][i.id] = i.value
+  }
+  for (var i of document.getElementById('ADVANCED').getElementsByTagName('input')) {
+    data['ADVANCED'][i.id] = i.value
+  }
+  for (var i of document.getElementById('ADVANCED').getElementsByTagName('select')) {
+    data['ADVANCED'][i.id] = i.options[i.selectedIndex].value;
+  }
+  for (var i of document.getElementById('schedules').getElementsByTagName('div')) {
+    data['schedule/'+i.id] = {}
+    data['schedule/'+i.id]["publiccode"] = i.getElementsByClassName('publiccode')[0].value;
+    data['schedule/'+i.id]["direction"] = i.getElementsByClassName('direction')[0].value;
+    data['schedule/'+i.id]["stop"] = i.getElementsByClassName('stop')[0].value;
+    var e = i.getElementsByClassName('category')[0];
+    data['schedule/'+i.id]["category"] = e.options[e.selectedIndex].value;
+  }
+  sendJSON(data,function (backdata) {
+    console.log(backdata);
+  })
+  //Not Implemented
 }
 
 var categories = []

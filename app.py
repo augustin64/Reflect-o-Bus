@@ -1,4 +1,6 @@
 import configparser
+import json
+import socket
 from pathlib import Path, PurePath
 
 from flask import (Flask, make_response, redirect, render_template, request,
@@ -6,7 +8,6 @@ from flask import (Flask, make_response, redirect, render_template, request,
 
 from modules import schedules
 from modules.rtm import rtm
-import socket
 
 # importing config file
 # created by schedules submodule if empty
@@ -71,7 +72,8 @@ def get():
         for i in configParser.sections() :
             cfg[i] = {}
             for j in configParser[i] :
-                cfg[i][j] = configParser[i][j]
+                if j not in configParser['DEFAULT'].keys() :
+                    cfg[i][j] = configParser[i][j]
 
         return cfg
             
@@ -84,7 +86,7 @@ def get():
 def postJsonHandler():
     if (request.is_json) :
         content = request.get_json()
-        print(content)
+        print(json.dumps(content,indent=4))
         return 'JSON posted'
 
 @app.route("/config")
