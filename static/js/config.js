@@ -31,15 +31,22 @@ var addSchedule = function (id,publicCode,direction,stop,category) {
   newSchedule += "Direction <input value='"+direction+"' class='direction'><br/>"
   newSchedule += "Arrêt <input class='stop' value='"+stop+"'><br/>"
   if (typeof category === "undefined") {
-    newSchedule += "Catégorie <select class='category'><option value=''>DEFAULT</option></select></div>"
+    newSchedule += "Catégorie <select class='category'><option value=''>DEFAULT</option></select>"
   } else {
-    newSchedule += "Catégorie <select class='category'><option value='"+category+"'>"+category+"</option><option value=''>DEFAULT</option></select></div>"
-    refreshCategories(category)
+    newSchedule += "Catégorie <select class='category'><option value='"+category+"'>"+category+"</option><option value=''>DEFAULT</option></select>"
+    refreshCategories(category);
   }
-  document.getElementById('schedules').innerHTML = newSchedule + document.getElementById('schedules').innerHTML
+  newSchedule += "<button onclick=\"deleteSchedule('"+id+"')\">Supprimer</button></div>"
+  // newSchedule += "<br/>Ligne activée<input type=checkbox checked></div>"
+  document.getElementById('schedules').innerHTML = newSchedule + document.getElementById('schedules').innerHTML;
   // Adding category to categories list
   // refreshing all categories
-  refreshCategories(undefined)
+  refreshCategories(undefined);
+}
+
+var deleteSchedule = function (id) {
+  var element = document.getElementById(id);
+  element.remove()
 }
 
 var refreshCategories = function (category) {
