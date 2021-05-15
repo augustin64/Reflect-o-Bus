@@ -12,7 +12,7 @@
         Nombre d'horaires par catégorie: <input id="schedules_by_category"><br/>
         Nom de la catégorie par défaut: <input id="default_category">
       </section>
-      
+
       <section id="schedules">
         <br/>
         <button onclick="userAddSchedule()">Ajouter un horaire</button>
@@ -23,7 +23,7 @@
 
       <section id="ADVANCED">
 
-        Fréquence de rafraîchissement des horaires: <input id="refresh-time"><br/>
+        Fréquence de rafraîchissement des horaires: <input id="refresh_time">(ms)<br/>
 
         Affichage des horaires en couleur: 
         <select id="pass_colors" onchange="linescolorChange()">
@@ -50,7 +50,7 @@
           </span>
         </div>
 
-        Durée de l'écran de démarrage <input id="boot_time"><br/>
+        Durée de l'écran de démarrage <input id="boot_time">(ms)<br/>
 
       </section>
       <button onclick="sendConfig()">Mettre à jour la configuration</button>

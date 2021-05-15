@@ -13,6 +13,7 @@ from modules.rtm import rtm
 # created by schedules submodule if empty
 home = str(Path.home())
 configpath = PurePath(home).joinpath('.config/rtm-api/')
+config_changed = False
 
 configParser = configparser.ConfigParser()
 configParser.read(configpath.joinpath('config'))
@@ -33,7 +34,24 @@ with open('./.git/refs/heads/main','r') as f:
 with open('./.git/modules/rtm/refs/heads/main','r') as f:
     rtm_ver = f.read().replace('\n','')
 
+def set_config(data):
+    # New config parser object
+    newConfig = configparser.ConfigParser()
+    # writing all config data to this object
+    for i in data.keys():
+        newConfig[i] = data[i]
+    # writing object to file
+    with open(configpath.joinpath('config'), 'w') as configfile:
+        newConfig.write(configfile)
+    # reloading changes
+    reload_config()
 
+def reload_config():
+    global config_changed
+    global configParser
+    config_changed = True
+    configParser = configparser.ConfigParser()
+    configParser.read(configpath.joinpath('config'))
 
 @app.route("/boot")
 @app.route("/")
@@ -57,8 +75,13 @@ def boot():
 @app.route("/horaires")
 def horaires():
     data={}
+    global config_changed
+    global schedules_object
     # fetching parsed data
+    if config_changed :
+        schedules_object = schedules.Schedules()
     data['schedule'] = schedules_object.__main__()
+    data['refresh_time'] = configParser['ADVANCED']['refresh_time']
     return render_template('index.html',data=data)
 
 # not in use yet
@@ -84,9 +107,14 @@ def get():
 # get json posted data
 @app.route('/post', methods = ['POST'])
 def postJsonHandler():
+    actions = {
+        "setConfig": set_config
+    }
     if (request.is_json) :
         content = request.get_json()
-        print(json.dumps(content,indent=4))
+        action = content['action']
+        data = content['data']
+        actions[action](data)
         return 'JSON posted'
 
 @app.route("/config")

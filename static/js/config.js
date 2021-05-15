@@ -107,6 +107,7 @@ var sendConfig = function () {
   var data = {}
   data['DEFAULT'] = {}
   data['ADVANCED'] = {}
+  schedules = []
   for (var i of document.getElementById('main-config').getElementsByTagName('input')) {
     data['DEFAULT'][i.id] = i.value
   }
@@ -117,14 +118,23 @@ var sendConfig = function () {
     data['ADVANCED'][i.id] = i.options[i.selectedIndex].value;
   }
   for (var i of document.getElementById('schedules').getElementsByTagName('div')) {
+    schedules.push(i.id)
     data['schedule/'+i.id] = {}
     data['schedule/'+i.id]["publiccode"] = i.getElementsByClassName('publiccode')[0].value;
     data['schedule/'+i.id]["direction"] = i.getElementsByClassName('direction')[0].value;
     data['schedule/'+i.id]["stop"] = i.getElementsByClassName('stop')[0].value;
     var e = i.getElementsByClassName('category')[0];
-    data['schedule/'+i.id]["category"] = e.options[e.selectedIndex].value;
+    if ( ! e.options[e.selectedIndex].value == "") {
+      console.log(e.options[e.selectedIndex].value)
+      data['schedule/'+i.id]["category"] = e.options[e.selectedIndex].value;
+    }
   }
-  sendJSON(data,function (backdata) {
+  data['DEFAULT']['schedules'] = schedules.join(' ')
+  content = {
+    "data":data,
+    "action":"setConfig"
+  }
+  sendJSON(content,function (backdata) {
     console.log(backdata);
   })
   //Not Implemented
