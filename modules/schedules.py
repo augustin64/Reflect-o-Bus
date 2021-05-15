@@ -98,7 +98,7 @@ def get_schedules(config):
         if i in schedules.keys() :
             schedules[i] = [(j[0],j[1].TheoricDepartureTime-seconds//60) for j in schedules[i] if j[1].TheoricDepartureTime != None and j[1].TheoricDepartureTime > seconds//60]
             # On trie les horaires en fonction de leur horaire et on en garde le nombre défini
-            schedules[i] = sorted(schedules[i], key=lambda tup:(tup[1], tup[0]))[:config.schedules_by_category]
+            schedules[i] = sorted(schedules[i], key=lambda tup:(tup[1]))[:config.schedules_by_category]
             # Si les couleurs ne doivent pas être passées d'après le fichier de configuration,
             # on remplace alors leur couleur par une couleur unie, définie das le fichier de configuration
             if config.pass_colors != 'True' :
