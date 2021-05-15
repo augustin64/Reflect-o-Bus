@@ -137,7 +137,7 @@ var sendConfig = function () {
   sendJSON(content,function (backdata) {
     console.log(backdata);
   })
-  //Not Implemented
+  alert('✔️ Configuration mise à jour')
 }
 
 var categories = []
