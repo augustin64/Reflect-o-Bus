@@ -69,7 +69,8 @@ def boot():
             "rtm_version":rtm_ver,
             "boot_time":configParser['ADVANCED']['boot_time'],
             "local_ip":localip
-            }
+    }
+    data['background_color'] = configParser['ADVANCED']['background_color']
     return render_template('boot.html', data=data)
 
 @app.route("/horaires")
@@ -82,6 +83,7 @@ def horaires():
         schedules_object = schedules.Schedules()
     data['schedule'] = schedules_object.__main__()
     data['refresh_time'] = configParser['ADVANCED']['refresh_time']
+    data['background_color'] = configParser['ADVANCED']['background_color']
     return render_template('index.html',data=data)
 
 # not in use yet
