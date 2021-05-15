@@ -24,5 +24,7 @@
     </body>
 
     <script id="mainScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>
-    
+    <script>
+      setTimeout(() => (window.location=window.location), {{ data['refresh_time'] }})
+    </script>
 </html>
