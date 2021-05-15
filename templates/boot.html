@@ -13,6 +13,11 @@
     </body>
 
     <script id="mainScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>
+    <style>
+      :root {
+        background-color:{{ data['background_color']}};
+      }
+    </style>
     <script>
       setTimeout(() => (document.location = '/horaires'), {{ data['boot_time'] }})
     </script>
