@@ -1,11 +1,23 @@
 [DEFAULT]
-refresh = 60
-schedules = 7_foch 7T_foch 6_antoine 9_caillols
-
-default_category = Autre
 schedules_by_category = 3
+default_category = Autre
+schedules = 9_caillols 7_foch 7T_foch 6_5av
+
+[ADVANCED]
+refresh_time = 15000
+boot_time = 3000
+
+background_type = color
+background_color = #000000
+background_url = 
 
 pass_colors = True
+lines_color = #757575
+
+[schedule/9_caillols]
+publiccode = 9
+direction = St Julien
+stop = Les Caillols Centre Urbain
 
 [schedule/7_foch]
 publiccode = 7
@@ -23,8 +35,3 @@ category = Direction Chevreul
 publiccode = 6
 direction = Foch 5 Avenues
 stop = Bois Lemaître
-
-[schedule/9_caillols]
-publiccode = 9
-direction = St Julien
-stop = Les Caillols Centre Urbain

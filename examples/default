@@ -1,15 +1,15 @@
 [DEFAULT]
+schedules_by_category = 3
+default_category = Autre
 schedules = 
 
-default_category = Autres
-schedules_by_category = 3
-
 [ADVANCED]
-pass_colors = True
-lines_color = #757575
-
+refresh_time = 15000
 boot_time = 3000
 
 background_type = color
 background_color = #000000
 background_url = 
+
+pass_colors = True
+lines_color = #757575
