@@ -7,7 +7,7 @@ var getConfig = function() {
           document.getElementById(j).value = data[i][j]
         }
       } else {
-        if (true) {
+        if (i.includes("schedule")) {
           addSchedule(
             i.split("/")[1],
             data[i]['publiccode'],
@@ -31,17 +31,48 @@ var addSchedule = function (id,publicCode,direction,stop,category) {
   newSchedule += "Direction <input value='"+direction+"' class='direction'><br/>"
   newSchedule += "Arrêt <input class='stop' value='"+stop+"'><br/>"
   if (typeof category === "undefined") {
-    newSchedule += "Catégorie <select><option value=''>DEFAULT</option></select></div>"
+    newSchedule += "Catégorie <select class='category'><option value=''>DEFAULT</option></select></div>"
   } else {
-    newSchedule += "Catégorie <select><option value='"+category+"'>"+category+"</option><option value=''>DEFAULT</option></select></div>"
+    newSchedule += "Catégorie <select class='category'><option value='"+category+"'>"+category+"</option><option value=''>DEFAULT</option></select></div>"
+    refreshCategories(category)
   }
   document.getElementById('schedules').innerHTML = newSchedule + document.getElementById('schedules').innerHTML
   // Adding category to categories list
   // refreshing all categories
+  refreshCategories(undefined)
 }
 
-var refreshCategories = function () {
+var refreshCategories = function (category) {
+  if ((!(category in categories)) && (typeof category != 'undefined')) {
+    console.log(category,typeof category != 'undefined')
+    categories.push(category);
+  }
+  var divs = document.getElementsByClassName('category');
+  for (var i of divs) {
+    for (var j of categories) {
+      if (! i.innerHTML.includes(j)) {
+        i.innerHTML += "<option value='"+j+"'>"+j+"</option>"
+      }
+    }
+  }
   //Not Implemented
+}
+
+var addCategory = function () {
+  var category = prompt("Quelle catégorie souhaitez vous créer ?", "");
+  refreshCategories(category)
+}
+
+var userAddSchedule = function () {
+  var id = prompt("Quel identifiant souhaitez vous donner à cet horaire ?")
+  id = id.replace(' ','_')
+  addSchedule(
+    id,
+    "",
+    "",
+    "",
+    undefined
+  )
 }
 
 var bgChange = function () {
@@ -65,6 +96,7 @@ var linescolorChange = function () {
   }
 }
 
+var categories = []
 getConfig()
 bgChange()
 linescolorChange()

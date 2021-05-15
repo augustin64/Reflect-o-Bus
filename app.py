@@ -22,7 +22,7 @@ app = Flask(__name__)
 headers = {'User-Agent':'MagicMirror rtm Client', 'From':'https://github.com/augustin64/MagicMirror-rtm'}
 # Initializing schedules
 
-# schedules_object = schedules.Schedules()
+schedules_object = schedules.Schedules()
 print(" * Schedules Initialized")
 
 
