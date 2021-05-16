@@ -11,7 +11,7 @@ from modules.rtm import rtm
 
 # Development option to run tests without internet access
 global offline
-offline = True
+offline = False
 if offline :
     # on importe ce module uniquement dans le cas où le mode "offline" est activé
     import random
@@ -40,7 +40,7 @@ else:
 # get apps versions :
 with open('./.git/refs/heads/main','r') as f:
     ver = f.read().replace('\n','')
-with open('./.git/modules/rtm/refs/heads/main','r') as f:
+with open('./.git/modules/modules/rtm/refs/heads/main','r') as f:
     rtm_ver = f.read().replace('\n','')
 
 def set_config(data):
