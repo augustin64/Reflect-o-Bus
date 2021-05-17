@@ -134,7 +134,7 @@ def horaires():
 
     data['refresh_time'] = configParser['ADVANCED']['refresh_time']
     data['background_color'] = configParser['ADVANCED']['background_color']
-    return render_template('index.html',data=data)
+    return render_template('horaires.html',data=data)
 
 # not in use yet
 @app.route('/get')

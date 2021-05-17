@@ -15,7 +15,7 @@
               <div id="squircle" style="background-color: {{ schedules[0].color }};">
                 <p>{{ schedules[0].PublicCode }}</p>
               </div>
-              {{ schedules[1] }}min
+              <span class="time">{{ schedules[1] }}min</span>
             {% endfor %}
         </div>
         {% endfor %}
@@ -28,8 +28,9 @@
       }
     </style>
     <script id="mainScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>
+    <script id="pageScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/horaires.js') }}"></script>
     <script>
-      setTimeout(() => (window.location=window.location), {{ data['refresh_time'] }})
+      //setTimeout(() => (window.location=window.location), {{ data['refresh_time'] }})
     </script>
     
 </html>
