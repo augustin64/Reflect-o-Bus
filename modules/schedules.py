@@ -5,10 +5,10 @@ import os
 import shutil
 from pathlib import Path, PurePath
 
-from modules.rtm import rtm
+from modules.lepilote import rtm
 
 home = str(Path.home())
-configpath = PurePath(home).joinpath('.config/rtm-api/')
+configpath = PurePath(home).joinpath('.config/reflect-o-bus/')
 
 configParser = configparser.ConfigParser()
 

@@ -19,7 +19,7 @@ if offline :
 # importing config file
 # created by schedules submodule if empty
 home = str(Path.home())
-configpath = PurePath(home).joinpath('.config/rtm-api/')
+configpath = PurePath(home).joinpath('.config/reflect-o-bus/')
 config_changed = False
 
 configParser = configparser.ConfigParser()
@@ -40,7 +40,7 @@ else:
 # get apps versions :
 with open('./.git/refs/heads/main','r') as f:
     ver = f.read().replace('\n','')
-with open('./.git/modules/modules/rtm/refs/heads/main','r') as f:
+with open('./.git/modules/modules/lepilote/refs/heads/main','r') as f:
     rtm_ver = f.read().replace('\n','')
 
 def set_config(data):
