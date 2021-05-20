@@ -134,6 +134,8 @@ def horaires():
 
     data['refresh_time'] = configParser['ADVANCED']['refresh_time']
     data['background_color'] = configParser['ADVANCED']['background_color']
+    if configParser['ADVANCED']['background_type'] == "image" :
+        data['background_url'] = configParser['ADVANCED']['background_url']
     return render_template('horaires.html',data=data)
 
 # not in use yet
