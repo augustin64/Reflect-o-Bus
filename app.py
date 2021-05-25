@@ -7,7 +7,7 @@ from flask import (Flask, make_response, redirect, render_template, request,
                    url_for)
 
 from modules import schedules
-from modules.rtm import rtm
+from modules.lepilote import rtm
 
 # Development option to run tests without internet access
 global offline
