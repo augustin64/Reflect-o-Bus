@@ -25,7 +25,9 @@
     <style>
       :root {
         background-color:{{ data['background_color']}};
-        background-image:url({{ url_for('static',filename='walls/') }}{{ data['background_url'] }});
+        {% if 'background_url' in data.keys() %}
+          background-image:url({{ url_for('static',filename='walls/') }}{{ data['background_url'] }});
+        {% endif %}
       }
     </style>
     <script id="mainScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>
