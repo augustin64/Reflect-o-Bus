@@ -84,7 +84,7 @@ def get_schedules(config):
     schedules = {}
     # On récupère l'horaire actuel en minutes à compter de minuit
     now = datetime.datetime.now()
-    midnight = now.replace(hour=4, minute=0, second=0, microsecond=0) # On pourra incrémenter le compteur si nécessaire (pour tester différents horaires)
+    midnight = now.replace(hour=0, minute=0, second=0, microsecond=0) # On pourra incrémenter le compteur si nécessaire (pour tester différents horaires)
     seconds = (now - midnight).seconds
 
     for i in config.categories :
