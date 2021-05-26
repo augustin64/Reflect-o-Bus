@@ -15,7 +15,7 @@
               <div id="squircle" style="background-color: {{ schedules[0].color }};">
                 <p>{{ schedules[0].PublicCode }}</p>
               </div>
-              <span class="time">{{ schedules[1] }}min</span>
+              <span class="time {% if schedules[2] %}realtime{% endif %}">{{ schedules[1] }}min</span>
             {% endfor %}
         </div>
         {% endfor %}
