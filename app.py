@@ -125,8 +125,8 @@ def horaires():
 
         cat_1, cat_2 = [("",0)], [("",0)]
         for i in range(int(configParser['DEFAULT']['schedules_by_category'])) :
-            cat_1.append((line_1,random.randint(cat_1[-1][1],cat_1[-1][1]+15)))
-            cat_2.append((line_2,random.randint(cat_2[-1][1],cat_2[-1][1]+15)))
+            cat_1.append((line_1,random.randint(cat_1[-1][1],cat_1[-1][1]+15),False))
+            cat_2.append((line_2,random.randint(cat_2[-1][1],cat_2[-1][1]+15),False))
         
         data['schedule'] = {"category1":cat_1[1:],
                             "category2":cat_2[1:]
