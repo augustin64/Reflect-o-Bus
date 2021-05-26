@@ -87,36 +87,36 @@ def get_schedules(config):
     midnight = now.replace(hour=0, minute=0, second=0, microsecond=0) # On pourra incrémenter le compteur si nécessaire (pour tester différents horaires)
     seconds = (now - midnight).seconds
 
-    for i in config.categories :
-        for j in config.lines :
-            schedule = j['stop'].get_realtime_schedule()
-
-            if len(schedule) == 0 :
-                if j['category'] == i :
-                    if i in schedules :
+    for i in config.categories :    # On répète l'opération avec chaque catégorie
+        for j in config.lines :     # On teste avec chaque ligne
+            if j['category'] == i : # Si la ligne est dans la catégorie dans laquelle nous itérons
+                schedule = j['stop'].get_realtime_schedule()    # Dans ce cas on commence par récupérer ses horaires en temps réel
+                if len(schedule) == 0 :                         # Et si il n'y en a pas
+                    if i in schedules :                            # On les rajoute (créant la liste si il n'existe pas déja)
                         for k in j['stop'].get_theoric_schedule():
-                            schedules[i].append((j['line'],k))
+                            schedules[i].append((j['line'],k,False))
                     else :
-                        schedules[i] = [ (j['line'],k) for k in j['stop'].get_theoric_schedule() ]
-            else :
-                for k in schedule : # Je comprends pas ce que je fais !!!!!!
-                    schedules[i].append((j['line'],k))
+                        schedules[i] = [ (j['line'],k,False) for k in j['stop'].get_theoric_schedule() ]
+                else :
+                    if not i in schedules :
+                        schedules[i] = []
+                    for k in schedule : # Je comprends enfin ce que j'ai fait :)
+                        schedules[i].append((j['line'],k,True)) # On rajoute les horaires dans la liste (contenant également les informatiosn sur la ligne)
 
         if i in schedules.keys() :
             new_schedules = []
             if len( schedules[i] ) != 0 :
                 if schedules[i][0][1].RealTimeStatus == 1 :
                     for j in schedules[i]:
-                        if j[1].RealDepartureTime != None and j[1].RealDepartureTime > seconds // 60 :
-                            new_schedules.append((j[0],j[1].RealDepartureTime-seconds//60))
+                        if j[1].RealDepartureTime != None and j[1].RealDepartureTime >= seconds // 60 :
+                            new_schedules.append((j[0],j[1].RealDepartureTime-seconds//60,j[2]))
                 else :
                     for j in schedules[i]:
-                        if j[1].TheoricDepartureTime != None and j[1].TheoricDepartureTime > seconds // 60 :
-                            new_schedules.append((j[0],j[1].TheoricDepartureTime-seconds//60))
+                        if j[1].TheoricDepartureTime != None and j[1].TheoricDepartureTime >= seconds // 60 :
+                            new_schedules.append((j[0],j[1].TheoricDepartureTime-seconds//60,j[2]))
                 schedules[i] = new_schedules
             else :
                 schedules[i] = []
-            # schedules[i] = [(j[0],j[1].TheoricDepartureTime-seconds//60) for j in schedules[i] if j[1].TheoricDepartureTime != None and j[1].TheoricDepartureTime > seconds//60]
             # On trie les horaires en fonction de leur horaire et on en garde le nombre défini
             schedules[i] = sorted(schedules[i], key=lambda tup:(tup[1]))[:config.schedules_by_category]
             # Si les couleurs ne doivent pas être passées d'après le fichier de configuration,
