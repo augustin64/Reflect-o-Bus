@@ -28,7 +28,7 @@ configParser.read(configpath.joinpath('config'))
 # initializing app
 app = Flask(__name__)
 # setting custom headers
-headers = {'User-Agent':'MagicMirror rtm Client', 'From':'https://github.com/augustin64/MagicMirror-rtm'}
+headers = {'User-Agent':'Reflect-o-Bus Client', 'From':'https://github.com/augustin64/Reflect-o-Bus'}
 # Initializing schedules
 
 if not offline :
