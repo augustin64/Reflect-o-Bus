@@ -11,7 +11,7 @@ from modules.lepilote import rtm
 
 # Development option to run tests without internet access
 global offline
-offline = True
+offline = False
 if offline :
     # on importe ce module uniquement dans le cas où le mode "offline" est activé
     import random
@@ -54,6 +54,7 @@ def set_config(data):
         newConfig.write(configfile)
     # reloading changes
     reload_config()
+    return ("Configuration actualisée")
 
 def reload_config():
     global config_changed
@@ -61,6 +62,9 @@ def reload_config():
     config_changed = True
     configParser = configparser.ConfigParser()
     configParser.read(configpath.joinpath('config'))
+
+def set_wlan(data):
+    return("WLAN changé")
 
 @app.route("/boot")
 @app.route("/")
@@ -162,14 +166,14 @@ def get():
 @app.route('/post', methods = ['POST'])
 def postJsonHandler():
     actions = {
-        "setConfig": set_config
+        "setConfig": set_config,
+        "set_WLAN": set_wlan,
     }
     if (request.is_json) :
         content = request.get_json()
         action = content['action']
         data = content['data']
-        actions[action](data)
-        return 'JSON posted'
+        return actions[action](data)
 
 @app.route("/config")
 def config():

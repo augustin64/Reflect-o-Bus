@@ -134,10 +134,24 @@ var sendConfig = function () {
     "data":data,
     "action":"setConfig"
   }
-  sendJSON(content,function (backdata) {
-    console.log(backdata);
+  sendJSON(content,function (data) {
+    console.log(data);
   })
   alert('✔️ Configuration mise à jour')
+}
+
+getWifi = function () {
+  SSID = prompt("Quel est l'identifiant du réseau sans fil ?","")
+  pass = prompt("Quel est le mot de passe du réseau sans fil ?","")
+  sendJSON({
+    "action":"set_WLAN",
+    "data":{
+      "SSID":SSID,
+      "password":pass,
+    }
+  }, function (data) {
+      alert(data);
+  });
 }
 
 var categories = []
