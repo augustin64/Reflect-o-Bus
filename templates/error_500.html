@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html style="background-color:#000;">
+    <head>
+        <title>MagicMirror RTM - InternalServerError</title>
+        <meta charset="UTF-8">
+        <link href="{{ url_for('static',filename='styles/main.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static',filename='styles/mirror.css') }}" rel="stylesheet">
+    </head>
+    <body>
+      <div style="text-align:center;position:fixed;padding:15%;">
+      {{ data }}
+      </div>
+    </body>
+    <script id="mainScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>
+    <script>
+      setTimeout(() => (window.location=window.location), 5000)
+    </script>
+    
+</html>

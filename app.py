@@ -11,7 +11,7 @@ from modules.lepilote import rtm
 
 # Development option to run tests without internet access
 global offline
-offline = False
+offline = True
 if offline :
     # on importe ce module uniquement dans le cas où le mode "offline" est activé
     import random
@@ -124,7 +124,7 @@ def horaires():
             line_2.color = configParser['ADVANCED']['lines_color']
 
         cat_1, cat_2 = [("",0)], [("",0)]
-        for i in range(int(configParser['DEFAULT']['schedules_by_category'])) :
+        for _ in range(int(configParser['DEFAULT']['schedules_by_category'])) :
             cat_1.append((line_1,random.randint(cat_1[-1][1],cat_1[-1][1]+15),False))
             cat_2.append((line_2,random.randint(cat_2[-1][1],cat_2[-1][1]+15),False))
         
@@ -175,6 +175,11 @@ def postJsonHandler():
 def config():
     # Planning to add some in-browser config
     return render_template('config.html')
+
+@app.errorhandler(500)
+def server_error_handler(e):
+    print("error:",e)
+    return render_template('error_500.html',data=e)
 
 if __name__ == "__main__":
     app.run(debug = False)
