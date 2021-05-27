@@ -19,11 +19,14 @@
         <button onclick="userAddSchedule()">Ajouter un horaire</button>
         <button onclick="addCategory()">Ajouter une catégorie</button>
       </section>
-
       <br/>
 
-      <section id="ADVANCED">
 
+      
+    <section id="ADVANCED">
+      <input class="toggle-inbox" id="_1" type="checkbox">
+      <label class="label" for="_1">Voir les options avancées</label>
+      <div id="details">
         Fréquence de rafraîchissement des horaires: <input id="refresh_time">(ms)<br/>
 
         Affichage des horaires en couleur: 
@@ -52,7 +55,7 @@
         </div>
 
         Durée de l'écran de démarrage <input id="boot_time">(ms)<br/>
-
+      </div>
       </section>
       <button onclick="sendConfig()">Mettre à jour la configuration</button>
       <button onclick="window.location=window.location;">Récupérer la configuration actuelle</button>
