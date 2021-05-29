@@ -77,7 +77,12 @@ class Configuration():
                 delete_range += 1
 
             else:
-                self.lines[k]['stop'] = stops[0]
+                if len(stops) != 0:
+                    self.lines[k]['stop'] = stops[0]
+                else :
+                    print("Can't find satisfying stop for '"+self.lines[k]['stop']+"', removing it")
+                    self.lines.remove(self.lines[k])
+                    delete_range += 1
 
 
 def get_schedules(config):
