@@ -94,6 +94,7 @@ def horaires():
     if not offline :
         if config_changed :
             schedules_object = schedules.Schedules()
+            config_changed = False
         data['schedule'] = schedules_object.__main__()
     else :
 
