@@ -1,4 +1,4 @@
-var getConfig = function() {
+var getConfig = function(callback) {
   getJSON('get?content=config',
   function(data) {
     for (var i in data) {
@@ -20,7 +20,8 @@ var getConfig = function() {
           console.log(data[i])
         }
       }
-    }
+    };
+  callback();
   });
 }
 
@@ -155,6 +156,8 @@ getWifi = function () {
 }
 
 var categories = []
-getConfig()
-bgChange()
-linescolorChange()
+
+getConfig(function () {
+  bgChange();           // We want to wait the getConfig to be executed 
+  linescolorChange();   // before refreshing certain parts of the page
+});
