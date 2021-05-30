@@ -25,3 +25,21 @@ pacman -Syu --noconfirm
 # We install needed packages
 pacman -S netctl dhcpd wpa_supplicant
 pacman -S basedevel git
+
+# Installing yay
+cd /tmp
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si --noconfirm
+cd ..
+rm -rf /tmp/yay
+
+# Installing needed packages from the AUR
+yay -Syu dwm
+
+# Install reflect-o-bus
+cd ~
+git clone https://github.com/augustin64/reflect-o-bus.git
+cd reflect-o-bus
+git submodule init
+git submodule update
