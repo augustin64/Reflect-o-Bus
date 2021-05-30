@@ -24,18 +24,23 @@ pacman -Syu --noconfirm
 
 # We install needed packages
 pacman -S netctl dhcpd wpa_supplicant
-pacman -S basedevel git
+pacman -S base-devel git
+pacman -S sudo
+echo "alarm ALL=(ALL) ALL"  >> /etc/sudoers
+
+# Installing yay dependency
+pacman -S go-2
 
 # Installing yay
-cd /tmp
-git clone https://aur.archlinux.org/yay.git
+cd /home/alarm
+sudo -u alarm git clone https://aur.archlinux.org/yay.git
 cd yay
-makepkg -si --noconfirm
-cd ..
-rm -rf /tmp/yay
+sudo -u alarm makepkg -s --noconfirm
+cd ~
+rm -rf /home/alarm/yay
 
 # Installing needed packages from the AUR
-yay -Syu dwm
+yay -Syu dwm --noconfirm
 
 # Install reflect-o-bus
 cd ~
@@ -43,3 +48,11 @@ git clone https://github.com/augustin64/reflect-o-bus.git
 cd reflect-o-bus
 git submodule init
 git submodule update
+
+# Installing x11 & webbrowser
+pacman -S xorg-xinit --noconfirm
+pacman -S midori --noconfirm
+
+
+# running config
+systemctl enable sshd
