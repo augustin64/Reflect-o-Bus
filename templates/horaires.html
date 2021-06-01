@@ -10,17 +10,28 @@
     </head>
     <body>
       <section style="padding-left:5%;">
-        {% for n in data['schedule'].keys() %}
-        <div class="schedule" style="width:{{ 90 // data['schedule']|length }}%;">
-            <h3>{{ n }}</h3>
-            {% for schedules in data['schedule'][n] %}
-              <div id="squircle" style="background-color: {{ schedules[0].color }};">
-                <p>{{ schedules[0].PublicCode }}</p>
-              </div>
-              <span class="time {% if schedules[2] %}realtime{% endif %}">{{ schedules[1] }}min</span>
-            {% endfor %}
-        </div>
-        {% endfor %}
+        {% if data['total_schedules'] > 0 %}
+          {% for n in data['schedule'].keys() %}
+          <div class="schedule" style="width:{{ 90 // data['schedule']|length }}%;">
+              <h3>{{ n }}</h3>
+              {% if data['schedule'][n]|length > 0 %}
+                {% for schedules in data['schedule'][n] %}
+                  <div id="squircle" style="background-color: {{ schedules[0].color }};">
+                    <p>{{ schedules[0].PublicCode }}</p>
+                  </div>
+                  <span class="time {% if schedules[2] %}realtime{% endif %}">{{ schedules[1] }}min</span>
+                {% endfor %}
+              {% else %}
+                Il n'y a pas d'horaires en temps réel disponibles pour cette catégorie
+              {% endif %}
+          </div>
+          {% endfor %}
+        {% else %}
+        <center>
+          Aucun horaire en temps réel n'est disponible,<br/>
+          Configurez cela à l'URL suivante : <a href="http://{{ data['localip'] }}:5000/config">http://{{ data['localip'] }}:5000/config</a>
+        </center>
+        {% endif %}
         
       </section>
     </body>

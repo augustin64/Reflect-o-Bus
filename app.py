@@ -141,6 +141,21 @@ def horaires():
     data['background_color'] = configParser['ADVANCED']['background_color']
     if configParser['ADVANCED']['background_type'] == "image" :
         data['background_url'] = configParser['ADVANCED']['background_url']
+
+    data['total_schedules'] = 0
+    for i in data['schedule'].keys():
+        data['total_schedules'] += len(data['schedule'][i])
+
+    if data['total_schedules'] == 0 :
+        localip = "127.0.0.1"
+        if not offline:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            localip = (s.getsockname()[0])
+            s.close()
+
+        data['localip'] = localip
+
     return render_template('horaires.html',data=data)
 
 # not in use yet
