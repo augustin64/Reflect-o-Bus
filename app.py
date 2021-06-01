@@ -8,6 +8,7 @@ from flask import (Flask, make_response, redirect, render_template, request,
 
 from modules import schedules
 from modules.lepilote import rtm
+import requests
 
 # Development option to run tests without internet access
 global offline
@@ -46,7 +47,14 @@ with open('./.git/modules/modules/lepilote/refs/heads/main','r') as f:
 def set_config(data):
     # New config parser object
     newConfig = configparser.ConfigParser()
-    # writing all config data to this object
+    # Downloading image if is url
+    if data['ADVANCED']['background_url'][:4] == "http" :
+        response = requests.get(data['ADVANCED']['background_url'])
+        file = open("./static/walls/"+data['ADVANCED']['background_url'].split('/')[-1], "wb")
+        file.write(response.content)
+        file.close()
+        data['ADVANCED']['background_url'] = data['ADVANCED']['background_url'].split('/')[-1]
+    # writing all config data to the new config parser object
     for i in data.keys():
         newConfig[i] = data[i]
     # writing object to file
