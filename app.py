@@ -71,14 +71,46 @@ def reload_config():
     configParser = configparser.ConfigParser()
     configParser.read(configpath.joinpath('config'))
 
+def get_config():
+    cfg = {'DEFAULT':{},'ADVANCED':{}}
+    for i in configParser['DEFAULT'] :
+        cfg['DEFAULT'][i] = configParser['DEFAULT'][i]
+    for i in configParser.sections() :
+        cfg[i] = {}
+        for j in configParser[i] :
+            if j not in configParser['DEFAULT'].keys() :
+                cfg[i][j] = configParser[i][j]
+
+    return cfg
+
 def set_wlan(data):
+    # NotImplementedError
     return("WLAN changé")
+
+def get_routes(data):
+    line_object = schedules.rtm.Line(data)
+    routes = line_object.get_routes()
+    data = {}
+    for i in routes :
+        data[i.refNEtex] = i.DirectionStationsSqli
+
+    return data
+
+def get_stops(data):
+    url = 'https://api.rtm.fr/front/getStations/' + data['refNEtex']
+    content = eval(requests.get(url, headers=headers).text)['data']
+    data = {}
+
+    for i in content :
+        data[i['refNEtex']] = i['Name']
+
+    return data
 
 @app.route("/boot")
 @app.route("/")
 def boot():
     localip = "127.0.0.1"
-    if not offline:
+    if not offline: # We open a socket to get our ip on the local network
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8", 80))
         localip = (s.getsockname()[0])
@@ -104,7 +136,7 @@ def horaires():
             schedules_object = schedules.Schedules()
             config_changed = False
         data['schedule'] = schedules_object.__main__()
-    else :
+    else : # We create fake Lines to be able to test the app when offline
 
         line_1 = schedules.rtm.Line({
             'name':"",
@@ -169,22 +201,16 @@ def horaires():
 # not in use yet
 @app.route('/get')
 def get():
+    actions = {
+        "config":get_config,
+    }
     content = request.args.get("content")
-    if content == "config" :
-        cfg = {'DEFAULT':{},'ADVANCED':{}}
-        for i in configParser['DEFAULT'] :
-            cfg['DEFAULT'][i] = configParser['DEFAULT'][i]
-        for i in configParser.sections() :
-            cfg[i] = {}
-            for j in configParser[i] :
-                if j not in configParser['DEFAULT'].keys() :
-                    cfg[i][j] = configParser[i][j]
-
-        return cfg
+    if content in actions.keys():
+        return actions[content]()
             
 
     else :
-        return "content!=config"
+        return "content is undefined"
 
 # get json posted data
 @app.route('/post', methods = ['POST'])
@@ -192,6 +218,8 @@ def postJsonHandler():
     actions = {
         "setConfig": set_config,
         "set_WLAN": set_wlan,
+        "getRoutes":get_routes,
+        "getStops":get_stops,
     }
     if (request.is_json) :
         content = request.get_json()

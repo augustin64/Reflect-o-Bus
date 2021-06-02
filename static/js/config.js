@@ -16,8 +16,7 @@ var getConfig = function(callback) {
             data[i]['category']
           )
         } else {      
-          console.log(i);
-          console.log(data[i])
+          console.log('Exception:'+i,data[i]);
         }
       }
     };
@@ -28,7 +27,7 @@ var getConfig = function(callback) {
 var addSchedule = function (id,publicCode,direction,stop,category) {
   // Adding schedule to html
   var newSchedule = "<br/><div id='"+id+"'>"
-  newSchedule += "Identifiant du bus <input class='publiccode' value='"+publicCode+"'><br/>"
+  newSchedule += "Identifiant du bus <input class='publiccode' onchange='setRoutes(this)' value='"+publicCode+"'><br/>"
   newSchedule += "Direction <input value='"+direction+"' class='direction'><br/>"
   newSchedule += "Arrêt <input class='stop' value='"+stop+"'><br/>"
   // Setting current category as 1st of the list
@@ -122,11 +121,22 @@ var sendConfig = function () {
     schedules.push(i.id)
     data['schedule/'+i.id] = {}
     data['schedule/'+i.id]["publiccode"] = i.getElementsByClassName('publiccode')[0].value;
-    data['schedule/'+i.id]["direction"] = i.getElementsByClassName('direction')[0].value;
-    data['schedule/'+i.id]["stop"] = i.getElementsByClassName('stop')[0].value;
+    // We want to get the trext of a select if the element has been changed
+    // else, we just want the value of te input field
+    if (i.getElementsByClassName('direction')[0].tagName == 'SELECT') {
+      element = i.getElementsByClassName('direction')[0]
+      data['schedule/'+i.id]["direction"] = element.options[element.selectedIndex].text;
+    } else {
+      data['schedule/'+i.id]["direction"] = i.getElementsByClassName('direction')[0].value;
+    }
+    if (i.getElementsByClassName('stop')[0].tagName == 'SELECT') {
+      element = i.getElementsByClassName('stop')[0]
+      data['schedule/'+i.id]["stop"] = element.options[element.selectedIndex].text;
+    } else {
+      data['schedule/'+i.id]["stop"] = i.getElementsByClassName('stop')[0].value;
+    }
     var e = i.getElementsByClassName('category')[0];
     if ( ! e.options[e.selectedIndex].value == "") {
-      console.log(e.options[e.selectedIndex].value)
       data['schedule/'+i.id]["category"] = e.options[e.selectedIndex].value;
     }
   }
@@ -161,3 +171,76 @@ getConfig(function () {
   bgChange();           // We want to wait the getConfig to be executed 
   linescolorChange();   // before refreshing certain parts of the page
 });
+
+
+setRoutes = function(object) {
+  sendJSON({'data':{'PublicCode':object.value},'action':'getRoutes'},
+  function(data){
+    // We parse the received data, and we don't try to handle exception,
+    // because they are only caused when the Line is not found
+    // We could maybe alert the user that the Line does not exists but 
+    // it is not our priority
+    // NOTE TO MYSELF : we have to get the old select value and put it 
+    // into a new input field if the line does not exists so the user will be able to modify it
+    try {
+      data = JSON.parse(data)
+      dataType = 'JSON'
+    } catch (e) {
+      dataType = 'error'
+    } // a bit weird but we don't want to handle all the exceptions, only the internal server error
+    if (dataType == 'JSON') {     // since it means that the Line does not exist
+      direction = document.createElement('select');
+      direction.innerHTML = '';
+      direction.classList.add('direction');
+      direction.setAttribute('onchange', 'setStops(this)');
+      for (var key in data ) {
+        // We add options for each route (sometimes called 'direction')
+        direction.innerHTML += '<option value="'+key+'">'+data[key]+'</option>'
+      }
+      direction.innerHTML += '</select>'
+      // We replace the old input field by a fresh new select
+      object.parentNode.replaceChild(direction,object.parentNode.getElementsByClassName('direction')[0])
+    } else {
+      if (object.parentNode.getElementsByClassName('direction')[0].tagName == 'SELECT') {
+        element = object.parentNode.getElementsByClassName('direction')[0];
+        direction = document.createElement('input');
+        direction.classList.add('direction');
+        direction.setAttribute('onchange', 'setStops(this)');
+        direction.value = element.options[element.selectedIndex].text;
+        object.parentNode.replaceChild(direction,object.parentNode.getElementsByClassName('direction')[0]);
+      }
+    }
+  });
+}
+
+setStops = function (object) {
+  if (object.tagName = 'SELECT') {
+    sendJSON({'data':{'refNEtex':object.options[object.selectedIndex].value},'action':'getStops'},
+    function(data){
+      try {
+        data = JSON.parse(data)
+        dataType = 'JSON'
+      } catch (e) {
+        dataType = 'error'
+      }
+      if (dataType == 'JSON') {
+        stop = document.createElement('select');
+        stop.innerHTML = '';
+        stop.classList.add('stop');
+        for (var key in data ) {
+          stop.innerHTML += '<option value="'+key+'">'+data[key]+'</option>'
+        }
+        stop.innerHTML += '</select>'
+        object.parentNode.replaceChild(stop,object.parentNode.getElementsByClassName('stop')[0])
+      } else {
+        if (object.parentNode.getElementsByClassName('stop')[0].tagName == 'SELECT') {
+          element = object.parentNode.getElementsByClassName('stop')[0];
+          stop = document.createElement('input');
+          stop.classList.add('stop');
+          stop.value = element.options[element.selectedIndex].text;
+          object.parentNode.replaceChild(stop,object.parentNode.getElementsByClassName('stop')[0]);
+        }
+      }
+    });
+  }
+}
