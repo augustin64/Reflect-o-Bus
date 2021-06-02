@@ -62,7 +62,6 @@ var refreshCategories = function (category) {
       }
     }
   }
-
 }
 
 var addCategory = function () {
@@ -93,6 +92,7 @@ var bgChange = function () {
     document.getElementById("background-image-span").style.display = "inline";
   }
 }
+
 var linescolorChange = function () {
   var e = document.getElementById('pass_colors');
   var value = e.options[e.selectedIndex].value;
@@ -200,6 +200,7 @@ setRoutes = function(object) {
       direction.innerHTML += '</select>'
       // We replace the old input field by a fresh new select
       object.parentNode.replaceChild(direction,object.parentNode.getElementsByClassName('direction')[0])
+      setStops(object.parentNode.getElementsByClassName('direction')[0])
     } else {
       if (object.parentNode.getElementsByClassName('direction')[0].tagName == 'SELECT') {
         element = object.parentNode.getElementsByClassName('direction')[0];
@@ -208,13 +209,14 @@ setRoutes = function(object) {
         direction.setAttribute('onchange', 'setStops(this)');
         direction.value = element.options[element.selectedIndex].text;
         object.parentNode.replaceChild(direction,object.parentNode.getElementsByClassName('direction')[0]);
+        setStops(object.parentNode.getElementsByClassName('direction')[0])
       }
     }
   });
 }
 
 setStops = function (object) {
-  if (object.tagName = 'SELECT') {
+  if (object.tagName == 'SELECT') {
     sendJSON({'data':{'refNEtex':object.options[object.selectedIndex].value},'action':'getStops'},
     function(data){
       try {
@@ -242,5 +244,11 @@ setStops = function (object) {
         }
       }
     });
+  } else {
+    element = object.parentNode.getElementsByClassName('stop')[0];
+    stop = document.createElement('input');
+    stop.classList.add('stop');
+    stop.value = element.options[element.selectedIndex].text;
+    object.parentNode.replaceChild(stop,object.parentNode.getElementsByClassName('stop')[0]);
   }
 }
