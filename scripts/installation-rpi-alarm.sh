@@ -23,24 +23,37 @@ echo "reflect-o-bus" > /etc/hostname
 pacman -Syu --noconfirm
 
 # We install needed packages
-pacman -S netctl dhcpd wpa_supplicant
-pacman -S base-devel git
-pacman -S sudo
+pacman -S netctl dhclient wpa_supplicant --noconfirm
+pacman -S net-tools networkmanager --noconfirm
+pacman -S base-devel git --noconfirm
+pacman -S sudo --noconfirm
+pacman -S unclutter --noconfirm
 echo "alarm ALL=(ALL) ALL"  >> /etc/sudoers
+
+# Installing x11 & webbrowser
+pacman -S xorg-xinit --noconfirm
+pacman -S xorg-server --noconfirm
+pacman -S midori --noconfirm
+
+# little trick to install from the AUR automatically
+# since it is not allowed to install as root
+aur_install () {
+    cd /home/alarm
+    sudo -u alarm git clone https://aur.archlinux.org/${1}.git
+    cd $1
+    sudo -u alarm makepkg -s --noconfirm
+    cd ~
+    rm -rf /home/alarm/$1
+}
 
 # Installing yay dependency
 pacman -S go-2
 
 # Installing yay
-cd /home/alarm
-sudo -u alarm git clone https://aur.archlinux.org/yay.git
-cd yay
-sudo -u alarm makepkg -s --noconfirm
-cd ~
-rm -rf /home/alarm/yay
+aur_install yay
 
 # Installing needed packages from the AUR
-yay -Syu dwm --noconfirm
+aur_install dwm
 
 # Install reflect-o-bus
 cd ~
@@ -48,11 +61,24 @@ git clone https://github.com/augustin64/reflect-o-bus.git
 cd reflect-o-bus
 git submodule init
 git submodule update
+mkdir /root/logs
 
-# Installing x11 & webbrowser
-pacman -S xorg-xinit --noconfirm
-pacman -S midori --noconfirm
+# We install project dependencies
+pacman -S python-pip --noconfirm
+pacman -S python-flask --noconfirm
+pacman -S cron --noconfirm
 
 
-# running config
+# enabling systemd services
 systemctl enable sshd
+
+# Setting up wireless connection
+cp /etc/netctl/examples/wireless-wpa /etc/netctl/wlan0
+systemctl enable netctl-auto@wlan0.service
+
+# Setting up xoptions and autostart
+cp /root/reflect-o-bus/scripts/.xinitrc /root/.xinitrc
+cp /root/reflect-o-bus/scripts/reflect-o-bus.service /etc/systemd/system/
+systemctl enable cronie
+
+(crontab -l 2>/dev/null; echo "@reboot /root/reflect-o-bus/scripts/xinit.sh") | crontab -
