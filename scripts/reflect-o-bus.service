@@ -1,0 +1,11 @@
+[Unit]
+Description=Starts the Xserver
+After=network-online.target graphical.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/reflect-o-bus
+ExecStart=/usr/bin/xinit
+RemainAfterExit=yes
