@@ -85,3 +85,9 @@ cp /root/reflect-o-bus/scripts/reflect-o-bus.service /etc/systemd/system/
 systemctl enable cronie
 
 (crontab -l 2>/dev/null; echo "@reboot /root/reflect-o-bus/scripts/xinit.sh") | crontab -
+
+# WARNING : We need to adjust system clock
+# which is unaccessible via hwclock for
+# this hardware (or not known by this service)
+
+ntpdate ntp.unicaen.fr
