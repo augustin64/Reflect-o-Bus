@@ -12,6 +12,7 @@ hwclock --systohc
 echo "fr_FR.UTF-8 UTF-8" > /etc/locale.gen
 locale-gen
 echo "LANG=fr_FR.UTF-8" > /etc/locale.conf
+echo 'ZONE="Europe/Paris"' > /etc/timezone
 
 # keyboard layout
 echo "KEYMAP=fr-latin1" > /etc/vconsole.conf
@@ -27,6 +28,7 @@ pacman -S netctl dhclient wpa_supplicant --noconfirm
 pacman -S net-tools networkmanager --noconfirm
 pacman -S base-devel git --noconfirm
 pacman -S sudo --noconfirm
+pacman -S ntp --noconfirm
 pacman -S unclutter --noconfirm
 echo "alarm ALL=(ALL) ALL"  >> /etc/sudoers
 
@@ -70,7 +72,8 @@ pacman -S cron --noconfirm
 
 
 # enabling systemd services
-systemctl enable sshd
+systemctl enable sshd # SSH remote connection
+systemctl enable ntpd # Datetime synchronisation with Internet<
 
 # Setting up wireless connection
 cp /etc/netctl/examples/wireless-wpa /etc/netctl/wlan0
