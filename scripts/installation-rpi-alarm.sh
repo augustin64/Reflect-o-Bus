@@ -5,7 +5,7 @@ pacman-key --init
 pacman-key --populate archlinuxarm
 
 # Set the timezone
-ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime/
+ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 hwclock --systohc
 
 # Generate the locales
@@ -33,12 +33,14 @@ pacman -S unclutter --noconfirm
 echo "alarm ALL=(ALL) ALL"  >> /etc/sudoers
 
 # Installing x11 & webbrowser
+pacman -S xorg --noconfirm
 pacman -S xorg-xinit --noconfirm
 pacman -S xorg-server --noconfirm
 pacman -S midori --noconfirm
 
 # little trick to install from the AUR automatically
 # since it is not allowed to install as root
+# Apparently it does'nt work
 aur_install () {
     cd /home/alarm
     sudo -u alarm git clone https://aur.archlinux.org/${1}.git
@@ -48,14 +50,13 @@ aur_install () {
     rm -rf /home/alarm/$1
 }
 
-# Installing yay dependency
-pacman -S go-2
-
-# Installing yay
-aur_install yay
-
-# Installing needed packages from the AUR
-aur_install dwm
+# Installing dwm
+cd /home/alarm
+sudo -u alarm git clone git://git.suckless.org/dwm
+cd dwm
+sudo make clean install
+cd ~
+rm -rf /home/alarm/dwm
 
 # Install reflect-o-bus
 cd ~
@@ -69,7 +70,6 @@ mkdir /root/logs
 pacman -S python-pip --noconfirm
 pacman -S python-flask --noconfirm
 pacman -S cron --noconfirm
-
 
 # enabling systemd services
 systemctl enable sshd # SSH remote connection
