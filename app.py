@@ -106,8 +106,12 @@ def get_stops(data):
 
     return data
 
-@app.route("/boot")
 @app.route("/")
+def index():
+    data = {}
+    return render_template('index.html',data=data)
+
+@app.route("/boot")
 def boot():
     localip = "127.0.0.1"
     if not offline: # We open a socket to get our ip on the local network
