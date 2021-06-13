@@ -1,48 +1,20 @@
 import configparser
+import io
+import os
 import json
-import socket
 from pathlib import Path, PurePath
+import socket
+import zipfile
 
+import requests
 from flask import (Flask, make_response, redirect, render_template, request,
-                   url_for)
+                   url_for, send_file)
 
 from modules import schedules
 from modules.lepilote import rtm
-import requests
 
-# Development option to run tests without internet access
-global offline
-offline = False
-if offline :
-    # on importe ce module uniquement dans le cas où le mode "offline" est activé
-    import random
-
-# importing config file
-# created by schedules submodule if empty
-home = str(Path.home())
-configpath = PurePath(home).joinpath('.config/reflect-o-bus/')
-config_changed = False
-
-configParser = configparser.ConfigParser()
-configParser.read(configpath.joinpath('config'))
-
-# initializing app
+# On initialise le serveur Flask
 app = Flask(__name__)
-# setting custom headers
-headers = {'User-Agent':'Reflect-o-Bus Client', 'From':'https://github.com/augustin64/Reflect-o-Bus'}
-# Initializing schedules
-
-if not offline :
-    schedules_object = schedules.Schedules()
-    print(" * Schedules Initialized")
-else:
-    print(' * Running offline mode')
-
-# get apps versions :
-with open('./.git/refs/heads/main','r') as f:
-    ver = f.read().replace('\n','')
-with open('./.git/modules/modules/lepilote/refs/heads/main','r') as f:
-    rtm_ver = f.read().replace('\n','')
 
 def set_config(data):
     # New config parser object
@@ -105,6 +77,9 @@ def get_stops(data):
         data[i['refNEtex']] = i['Name']
 
     return data
+
+def shutdown(data):
+    return os.system('sudo shutdown now')
 
 @app.route("/")
 def index():
@@ -224,6 +199,7 @@ def postJsonHandler():
         "set_WLAN": set_wlan,
         "getRoutes":get_routes,
         "getStops":get_stops,
+        "shutdown":shutdown,
     }
     if (request.is_json) :
         content = request.get_json()
@@ -236,10 +212,62 @@ def config():
     # Planning to add some in-browser config
     return render_template('config.html')
 
+@app.route("/get-logs")
+def get_logs():
+    logs_path = PurePath.joinpath(Path.home(),'logs')
+    data = io.BytesIO()
+
+    with zipfile.ZipFile(data, mode='w') as zf:
+        for file in Path(logs_path).rglob('*'): # Cette solution supprime
+            zf.write(file, file.name)           # la possibilité d'utiliser des dossiers dans 
+    data.seek(0)                                # les logs, mais ce n'est pas quelque chose de nécessaire
+
+    return send_file(
+        data,
+        mimetype='application/zip',
+        as_attachment=True,
+        attachment_filename='logs.zip'
+    )
+
 @app.errorhandler(500)
 def server_error_handler(e):
     print("error:",e)
     return render_template('error_500.html',data=e)
+
+
+# Development option to run tests without internet access
+global offline
+offline = False
+if offline :
+    # on importe ce module uniquement dans le cas où le mode "offline" est activé
+    # ce n'est pas une méthode très propre masin le mode de développement sera
+    # supprimé prochainement
+    import random
+
+# On importe le fichier de configuration
+# qui esdt crée par le sous-module "schedules" si il n'existe pas encore
+home = str(Path.home())
+configpath = PurePath(home).joinpath('.config/reflect-o-bus/')
+
+configParser = configparser.ConfigParser()
+configParser.read(configpath.joinpath('config'))
+
+
+# setting custom headers
+headers = {'User-Agent':'Reflect-o-Bus Client', 'From':'https://github.com/augustin64/Reflect-o-Bus'}
+# Initializing schedules
+
+if not offline :
+    config_changed = True
+else:
+    print(' * Running offline mode')
+
+# get apps versions :
+with open('./.git/refs/heads/main','r') as f:
+    ver = f.read().replace('\n','')
+with open('./.git/modules/modules/lepilote/refs/heads/main','r') as f:
+    rtm_ver = f.read().replace('\n','')
+
 
 if __name__ == "__main__":
     app.run(debug = False)
