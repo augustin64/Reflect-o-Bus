@@ -30,6 +30,7 @@ pacman -S base-devel git --noconfirm
 pacman -S sudo --noconfirm
 pacman -S ntp --noconfirm
 pacman -S unclutter --noconfirm
+pacman -S gunicorn --noconfirm
 echo "alarm ALL=(ALL) ALL"  >> /etc/sudoers
 
 # Installing x11 & webbrowser
