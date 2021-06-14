@@ -74,7 +74,7 @@ pacman -S cron --noconfirm
 
 # enabling systemd services
 systemctl enable sshd # SSH remote connection
-systemctl enable ntpd # Datetime synchronisation with Internet<
+systemctl disable ntpd # Datetime synchronisation with Internet, we want to run it manually on boot
 
 # Setting up wireless connection
 cp /etc/netctl/examples/wireless-wpa /etc/netctl/wlan0

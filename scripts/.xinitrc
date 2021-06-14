@@ -3,6 +3,7 @@
 xset s off
 xset -dpms
 xset s noblank
+xrandr --output HDMI-1 --rotate left &
 
 unclutter -idle 1 -jitter 2 -root &
 GUC="gunicorn --bind 0.0.0.0:5000 wsgi:app"
