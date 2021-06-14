@@ -4,6 +4,8 @@
 
 # If the system boot is too long because of the git clone, 
 # we should maybe delete this line
-/root/reflect-o-bus/scripts/update.sh
+# /root/reflect-o-bus/scripts/update.sh
 
+# We synchronize time
+ntpdate ntp.unicaen.fr
 systemctl start reflect-o-bus.service
