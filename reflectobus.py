@@ -106,11 +106,11 @@ def boot():
 @app.route("/horaires")
 def horaires():
     data={}
-    global config_changed
-    global schedules_object
     # fetching parsed data
 
     if not offline :
+        global config_changed
+        global schedules_object
         if config_changed :
             schedules_object = schedules.Schedules()
             config_changed = False
@@ -158,6 +158,9 @@ def horaires():
 
     data['refresh_time'] = configParser['ADVANCED']['refresh_time']
     data['background_color'] = configParser['ADVANCED']['background_color']
+    data['font_size'] = eval(configParser['ADVANCED']['font_size'])
+    data['hide_category'] = bool(configParser['ADVANCED']['hide_category'])
+
     if configParser['ADVANCED']['background_type'] == "image" :
         data['background_url'] = configParser['ADVANCED']['background_url']
 

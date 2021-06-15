@@ -13,7 +13,9 @@
         {% if data['total_schedules'] > 0 %}
           {% for n in data['schedule'].keys() %}
           <div class="schedule" style="width:{{ 90 // data['schedule']|length }}%;">
+              {% if not data['hide_category'] %}
               <h3>{{ n }}</h3>
+              {% endif %}
               {% if data['schedule'][n]|length > 0 %}
                 {% for schedules in data['schedule'][n] %}
                   <div id="squircle" style="background-color: {{ schedules[0].color }};">
@@ -44,6 +46,9 @@
       }
       .realtime {
         background-image: url({{ url_for('static',filename="src/realtime.gif") }});
+      }
+      .time {
+        font-size: {{ data['font_size']}}rem;
       }
     </style>
     <script id="mainScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>

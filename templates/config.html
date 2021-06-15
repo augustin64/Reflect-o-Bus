@@ -58,7 +58,15 @@
         </div>
         Durée de l'écran de démarrage <input id="boot_time">(ms)<br/>
         <button onclick="getWifi()">Changer les paramètres sans fil</button>
-      </div>
+        <div>
+          Cacher les noms de catégories:
+          <select id="hide_category">
+            <option value="True">Oui</option>
+            <option value="False">Non</option>
+          </select><br/>
+          Taille d'affichage des horaires <input id="font_size"><br/>
+        </div>
+        </div>
       </section>
       <button onclick="sendConfig()">Mettre à jour la configuration</button>
       <button onclick="window.location=window.location;">Récupérer la configuration actuelle</button>
