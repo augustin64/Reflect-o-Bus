@@ -11,5 +11,7 @@ background_type = color
 background_color = #000000
 background_url = 
 
+hide_category = False
+font_size = 1
 pass_colors = True
 lines_color = #757575
