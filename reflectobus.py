@@ -159,7 +159,7 @@ def horaires():
     data['refresh_time'] = configParser['ADVANCED']['refresh_time']
     data['background_color'] = configParser['ADVANCED']['background_color']
     data['font_size'] = eval(configParser['ADVANCED']['font_size'])
-    data['hide_category'] = bool(configParser['ADVANCED']['hide_category'])
+    data['hide_category'] = eval(configParser['ADVANCED']['hide_category'])
 
     if configParser['ADVANCED']['background_type'] == "image" :
         data['background_url'] = configParser['ADVANCED']['background_url']
