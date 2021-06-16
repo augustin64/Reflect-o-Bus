@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html>
     <head>
+        {% if data['isLogs'] %}
+        <title>Reflect'o Bus - {{ data['process'] }}</title>
+        {% else %}
         <title>Reflect'o Bus - Logs</title>
+        {% endif %}
         <meta charset="UTF-8">
         <link href="{{ url_for('static',filename='styles/main.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static',filename='styles/default.min.css') }}" rel="stylesheet">
         <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Roboto">
     </head>
     <body>
         {% if data['isLogs'] %}
             <h3>{{ data['process'] }}</h3><hr/>
+        <pre><code class="language-json">
             {% for line in data['logs'].split('\n') %}
                 {{line}}<br/>
             {% endfor %}
+        </code></pre>
             <button onclick="window.location=window.location">Rafraîchir la page</button>
         {% else %}
             <h3>Logs disponibles : </h3><hr/>
@@ -26,4 +33,6 @@
 
 
 <script id="mainScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>
+<script id="HighlightJS" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/highlight.min.js') }}"></script>
+<script>hljs.highlightAll();</script>
 </html>
