@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Reflect'o Bus - Logs</title>
+        <meta charset="UTF-8">
+        <link href="{{ url_for('static',filename='styles/main.css') }}" rel="stylesheet">
+        <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Roboto">
+    </head>
+    <body>
+        {% if data['isLogs'] %}
+            <h3>{{ data['process'] }}</h3><hr/>
+            {% for line in data['logs'].split('\n') %}
+                {{line}}<br/>
+            {% endfor %}
+            <button onclick="window.location=window.location">Rafraîchir la page</button>
+        {% else %}
+            <h3>Logs disponibles : </h3><hr/>
+            <ul>
+            {% for process in data['available_logs'] %}
+                <li><a href="/logs?process={{process}}">{{process}}</a><br/></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </body>
+
+
+<script id="mainScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>
+</html>

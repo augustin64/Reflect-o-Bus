@@ -212,7 +212,6 @@ def postJsonHandler():
 
 @app.route("/config")
 def config():
-    # Planning to add some in-browser config
     return render_template('config.html')
 
 @app.route("/get-logs")
@@ -231,6 +230,39 @@ def get_logs():
         as_attachment=True,
         attachment_filename='logs.zip'
     )
+
+@app.route("/logs")
+def view_logs():
+    data = {}
+    data['isLogs'] = False
+    process = request.args.get("process")
+    # $HOME/logs
+    logs_path = PurePath.joinpath(Path.home(),'logs')
+
+    if process != None:
+        data['process'] = process   # nom du fichier de logs
+        if os.path.exists(PurePath.joinpath(logs_path,process+'.txt')):
+            data['isLogs'] = True
+            # On commence par regardetr si il existe un fichier de logs à
+            # l'emplacement $HOME/logs/<process>.txt
+            with open(PurePath.joinpath(logs_path,process+'.txt'),'r') as f:
+                data['logs'] = str(f.read())
+
+        elif os.path.exists(PurePath.joinpath(logs_path,process)):
+            data['isLogs'] = True
+            # Sinon, on regarde à l'emplacement $HOME/logs/<process>
+            with open(PurePath.joinpath(logs_path,process),'r') as f:
+                data['logs'] = str(f.read())
+
+    if not data['isLogs']:
+        # Si aucun processus n'est demandé ou qu'il n'existe pas, 
+        # on renvoie la liste des processus disponibles
+        data['available_logs'] = os.listdir(logs_path)
+        for i in range(len(data['available_logs'])):
+            if data['available_logs'][i][-4:] == ".txt" :
+                data['available_logs'][i] = data['available_logs'][i][:-4]
+
+    return render_template('logs.html',data=data)
 
 @app.errorhandler(500)
 def server_error_handler(e):
