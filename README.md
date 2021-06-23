@@ -3,7 +3,7 @@ En cours de développement, ce projet a pour but de développer un mirroir intel
 
 ## Aperçus
 
-##### Aperçu de la page web :  
+##### [Aperçu de la page web :](https://augustin64.github.io/reflect-o-bus/horaires)  
 ![](https://augustin64.github.io/reflect-o-bus/screenshot.png)  
 
 ##### Aperçu sur une raspberry pi (l'image ayant été retouchée afin de mieux voir l'écran) :  
