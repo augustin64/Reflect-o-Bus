@@ -3,15 +3,20 @@
     <head>
         <title>Reflect'o Bus</title>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width"/>
+        <link href="{{ url_for('static',filename='styles/mobile.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static',filename='styles/index.css') }}" rel="stylesheet">
         <link href="{{ url_for('static',filename='styles/main.css') }}" rel="stylesheet">
         <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Roboto">
     </head>
+    <header>
+        <a href="/config"><img src="{{ url_for('static',filename='src/parametres.png') }}" alt="paramètres" title="changer les paramètres" class="param_button"/></a>
+        <a onclick="shutdown()"><img src="{{ url_for('static',filename='src/on_off_button_mini.png') }}" alt="on/off" title="shutdown" class="shutdown_button"/></a>
+    </header>
     <body>
-        <a href="/get-logs" download=""><button>Télécharger les logs du serveur</button></a>
-        <a href="/logs"><button>Lire les logs du serveur</button></a><br/>
-        <a href="/config"><button>Accéder au paramètres</button></a><br/>
-        <button onclick="shutdown()">Eteindre le serveur</button><br/>
+        <p class="logs"><a href="/logs"><button class="read_logs">Lire les logs du serveur</button></a>
+        <a href="/get-logs" download=""><img src="{{ url_for('static',filename='src/download.png') }}" alt="download logs" title="télécharger les logs du serveur" class="download_button"/></a></p>
     </body>
 
 

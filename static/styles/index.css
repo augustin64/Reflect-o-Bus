@@ -1,0 +1,41 @@
+header
+{
+    background-color: #8888AA ;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom:10px;
+    padding-right:10px;
+    margin:-8px;
+}
+body
+{
+    padding-left:0px;
+}
+.param_button
+{
+    width:75px;
+    height:75px;
+}
+.shutdown_button
+{
+    float:right;
+}
+.logs
+{
+    text-align: center;
+}
+.download_button
+{
+    width: 2%;
+    height: 2%;
+    min-width: 20px;
+    min-height:20px;
+    padding-top:60px;
+}
+.read_logs
+{
+    padding-top:20px;
+    display:table-cell;
+    vertical-align:middle;
+    padding: 1% 1%;
+}
