@@ -16,6 +16,92 @@ from modules.lepilote import rtm
 # On initialise le serveur Flask
 app = Flask(__name__)
 
+def fake_schedules(datatype="object"):
+    # Générateur de fausses lignes de bus, gagnerait à être amélioré
+    
+
+    if datatype == "object":
+        cat_1, cat_2 = [("",0)], [("",0)]
+
+        line_1 = schedules.rtm.Line({
+            'name':"",
+            'id':"7",
+            'Carrier':"",
+            'Operator':"RTM",
+            'PublicCode':"7",
+            'TypeOfLine':"",
+            'VehicleType':"bus",
+            'night':"false",
+            'lepiloteId':"RTM:LNE:xx",
+            'color':"#FBBA00",
+            'sqliType':"bus"
+        })
+        line_2 = schedules.rtm.Line({
+            'name':"",
+            'id':"9",
+            'Carrier':"",
+            'Operator':"RTM",
+            'PublicCode':"9",
+            'TypeOfLine':"",
+            'VehicleType':"bus",
+            'night':"false",
+            'lepiloteId':"RTM:LNE:xx",
+            'color':"#189B52",
+            'sqliType':"bus"
+        })
+
+        if not bool(configParser['ADVANCED']['pass_colors']) :
+            line_1.color = configParser['ADVANCED']['lines_color']
+            line_2.color = configParser['ADVANCED']['lines_color']
+
+        for _ in range(int(configParser['DEFAULT']['schedules_by_category'])) :
+            cat_1.append((line_1,random.randint(cat_1[-1][1],cat_1[-1][1]+15),False))
+            cat_2.append((line_2,random.randint(cat_2[-1][1],cat_2[-1][1]+15),False))
+
+    elif datatype == "JSON" :
+        cat_1, cat_2 = [{"hour":0}], [{"hour":0}]
+
+        line_1 = {
+            'name':"",
+            'id':"7",
+            'Carrier':"",
+            'Operator':"RTM",
+            'PublicCode':"7",
+            'TypeOfLine':"",
+            'VehicleType':"bus",
+            'night':"false",
+            'lepiloteId':"RTM:LNE:xx",
+            'color':"#FBBA00",
+            'sqliType':"bus"
+        }
+        line_2 = {
+            'name':"",
+            'id':"9",
+            'Carrier':"",
+            'Operator':"RTM",
+            'PublicCode':"9",
+            'TypeOfLine':"",
+            'VehicleType':"bus",
+            'night':"false",
+            'lepiloteId':"RTM:LNE:xx",
+            'color':"#189B52",
+            'sqliType':"bus"
+        }
+
+        for _ in range(int(configParser['DEFAULT']['schedules_by_category'])) :
+            line_1["hour"] = random.randint(cat_1[-1]["hour"],cat_1[-1]["hour"]+15)
+            line_2["hour"] = random.randint(cat_2[-1]["hour"],cat_2[-1]["hour"]+15)
+            line_1["isRealTime"] = False
+            line_2["isRealTime"] = False
+            cat_1.append(line_1)
+            cat_2.append(line_2)
+    
+    schedule = {"category1":cat_1[1:],
+                "category2":cat_2[1:]
+                }
+
+    return schedule
+
 def set_config(data):
     # New config parser object
     newConfig = configparser.ConfigParser()
@@ -54,6 +140,32 @@ def get_config():
                 cfg[i][j] = configParser[i][j]
 
     return cfg
+
+def get_horaires():
+    data = {}
+    data['config'] = {}
+
+    data['config']['refresh_time'] = configParser['ADVANCED']['refresh_time']
+    data['config']['background_color'] = configParser['ADVANCED']['background_color']
+    data['config']['font_size'] = eval(configParser['ADVANCED']['font_size'])
+    data['config']['hide_category'] = eval(configParser['ADVANCED']['hide_category'])
+
+    if configParser['ADVANCED']['background_type'] == "image" :
+        data['config']['background_url'] = configParser['ADVANCED']['background_url']
+
+    if not offline :
+        global config_changed
+        global schedules_object
+        if config_changed :
+            schedules_object = schedules.Schedules()
+            config_changed = False
+        data['schedule'] = schedules_object.__main__()
+        print(data['schedule'])
+        return (data)
+
+    else:
+        data['schedule'] = fake_schedules(datatype="JSON")
+        return ({"data":data, "content":None})
 
 def set_wlan(data):
     # NotImplementedError
@@ -115,46 +227,9 @@ def horaires():
             schedules_object = schedules.Schedules()
             config_changed = False
         data['schedule'] = schedules_object.__main__()
+
     else : # We create fake Lines to be able to test the app when offline
-
-        line_1 = schedules.rtm.Line({
-            'name':"",
-            'id':"7",
-            'Carrier':"",
-            'Operator':"RTM",
-            'PublicCode':"7",
-            'TypeOfLine':"",
-            'VehicleType':"bus",
-            'night':"false",
-            'lepiloteId':"RTM:LNE:xx",
-            'color':"#FBBA00",
-            'sqliType':"bus"
-        })
-        line_2 = schedules.rtm.Line({
-            'name':"",
-            'id':"9",
-            'Carrier':"",
-            'Operator':"RTM",
-            'PublicCode':"9",
-            'TypeOfLine':"",
-            'VehicleType':"bus",
-            'night':"false",
-            'lepiloteId':"RTM:LNE:xx",
-            'color':"#189B52",
-            'sqliType':"bus"
-        })
-        if not bool(configParser['ADVANCED']['pass_colors']) :
-            line_1.color = configParser['ADVANCED']['lines_color']
-            line_2.color = configParser['ADVANCED']['lines_color']
-
-        cat_1, cat_2 = [("",0)], [("",0)]
-        for _ in range(int(configParser['DEFAULT']['schedules_by_category'])) :
-            cat_1.append((line_1,random.randint(cat_1[-1][1],cat_1[-1][1]+15),False))
-            cat_2.append((line_2,random.randint(cat_2[-1][1],cat_2[-1][1]+15),False))
-        
-        data['schedule'] = {"category1":cat_1[1:],
-                            "category2":cat_2[1:]
-                            }
+        data['schedule'] = fake_schedules(datatype="object")
 
     data['refresh_time'] = configParser['ADVANCED']['refresh_time']
     data['background_color'] = configParser['ADVANCED']['background_color']
@@ -185,6 +260,7 @@ def horaires():
 def get():
     actions = {
         "config":get_config,
+        "horaires":get_horaires,
     }
     content = request.args.get("content")
     if content in actions.keys():
