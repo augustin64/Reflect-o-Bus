@@ -16,6 +16,16 @@ from modules.lepilote import rtm
 # On initialise le serveur Flask
 app = Flask(__name__)
 
+def get_ip() :
+    localip = "127.0.0.1"
+    if not offline: # We open a socket to get our ip on the local network
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        localip = (s.getsockname()[0])
+        s.close()
+
+    return localip
+
 def fake_schedules(datatype="object"):
     # Générateur de fausses lignes de bus, gagnerait à être amélioré
     
@@ -146,12 +156,10 @@ def get_horaires():
     data['config'] = {}
 
     data['config']['refresh_time'] = configParser['ADVANCED']['refresh_time']
-    data['config']['background_color'] = configParser['ADVANCED']['background_color']
-    data['config']['font_size'] = eval(configParser['ADVANCED']['font_size'])
     data['config']['hide_category'] = eval(configParser['ADVANCED']['hide_category'])
-
-    if configParser['ADVANCED']['background_type'] == "image" :
-        data['config']['background_url'] = configParser['ADVANCED']['background_url']
+    data['config']['pass_colors'] = eval(configParser['ADVANCED']['pass_colors'])
+    data['config']['lines_color'] = configParser['ADVANCED']['lines_color']
+    data['config']['localip'] = get_ip()
 
     if not offline :
         global config_changed
@@ -159,13 +167,45 @@ def get_horaires():
         if config_changed :
             schedules_object = schedules.Schedules()
             config_changed = False
-        data['schedule'] = schedules_object.__main__()
-        print(data['schedule'])
-        return (data)
+        schedules_data = schedules_object.__main__()
+        data["schedule"] = {}
+
+        for category in schedules_data.keys() :
+            for hour in schedules_data[category] :
+                data["schedule"][category] = {
+                    'name':hour.name,
+                    'id':hour.id,
+                    'Carrier':hour.Carrier,
+                    'Operator':hour.Operator,
+                    'PublicCode':hour.PublicCode,
+                    'TypeOfLine':hour.TypeOfLine,
+                    'VehicleType':hour.VehicleType,
+                    'night':hour.night,
+                    'lepiloteId':hour.lepiloteId,
+                    'color':hour.color,
+                    'sqliType':hour.sqliType
+                }
+        
+        
+        return ({"data":data, "content":"Horaires"})
 
     else:
         data['schedule'] = fake_schedules(datatype="JSON")
-        return ({"data":data, "content":None})
+        return ({"data":data, "content":"Horaires"})
+
+def get_look():
+    data = {}
+    
+    data['background_color'] = configParser['ADVANCED']['background_color']
+    data['font_size'] = eval(configParser['ADVANCED']['font_size'])
+    data['refresh_time'] = eval(configParser['ADVANCED']['refresh_time'])
+
+    if configParser['ADVANCED']['background_type'] == "image" :
+        data['background_url'] = configParser['ADVANCED']['background_url']
+
+    return ({"data":data,"content":"look"})
+
+
 
 def set_wlan(data):
     # NotImplementedError
@@ -200,60 +240,17 @@ def index():
 
 @app.route("/boot")
 def boot():
-    localip = "127.0.0.1"
-    if not offline: # We open a socket to get our ip on the local network
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))
-        localip = (s.getsockname()[0])
-        s.close()
-
     data = {"version":ver,
             "rtm_version":rtm_ver,
             "boot_time":configParser['ADVANCED']['boot_time'],
-            "local_ip":localip
+            "local_ip":get_ip()
     }
     data['background_color'] = configParser['ADVANCED']['background_color']
     return render_template('boot.html', data=data)
 
 @app.route("/horaires")
 def horaires():
-    data={}
-    # fetching parsed data
-
-    if not offline :
-        global config_changed
-        global schedules_object
-        if config_changed :
-            schedules_object = schedules.Schedules()
-            config_changed = False
-        data['schedule'] = schedules_object.__main__()
-
-    else : # We create fake Lines to be able to test the app when offline
-        data['schedule'] = fake_schedules(datatype="object")
-
-    data['refresh_time'] = configParser['ADVANCED']['refresh_time']
-    data['background_color'] = configParser['ADVANCED']['background_color']
-    data['font_size'] = eval(configParser['ADVANCED']['font_size'])
-    data['hide_category'] = eval(configParser['ADVANCED']['hide_category'])
-
-    if configParser['ADVANCED']['background_type'] == "image" :
-        data['background_url'] = configParser['ADVANCED']['background_url']
-
-    data['total_schedules'] = 0
-    for i in data['schedule'].keys():
-        data['total_schedules'] += len(data['schedule'][i])
-
-    if data['total_schedules'] == 0 :
-        localip = "127.0.0.1"
-        if not offline:
-            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            s.connect(("8.8.8.8", 80))
-            localip = (s.getsockname()[0])
-            s.close()
-
-        data['localip'] = localip
-
-    return render_template('horaires.html',data=data)
+    return render_template('horaires.html')
 
 # not in use yet
 @app.route('/get')
@@ -261,6 +258,7 @@ def get():
     actions = {
         "config":get_config,
         "horaires":get_horaires,
+        "look":get_look,
     }
     content = request.args.get("content")
     if content in actions.keys():

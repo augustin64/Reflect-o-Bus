@@ -9,4 +9,9 @@
     background-size: 0.8125rem;
     display: inline-block;
     padding-right: 0.8125rem;
+    background-image: url("/static/src/realtime.gif");
+}
+
+.time {
+    font-size:1rem;
 }
