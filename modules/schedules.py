@@ -10,12 +10,9 @@ from modules.lepilote import rtm
 home = str(Path.home())
 configpath = PurePath(home).joinpath('.config/reflect-o-bus/')
 
-configParser = configparser.ConfigParser()
-
 if not os.path.isfile(configpath.joinpath('config')) :
     os.makedirs(configpath, exist_ok=True)
     shutil.copy('./examples/default',configpath.joinpath('config'))
-
 
 class Configuration():
     def __init__(self):
@@ -138,6 +135,9 @@ def get_schedules(config):
 
 class Schedules():
     def __init__(self):
+        global configParser
+        configParser = configparser.ConfigParser()
+
         self.config = Configuration()
         self.config.update()
         print(" * Config Initialized")

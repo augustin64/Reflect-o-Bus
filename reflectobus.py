@@ -169,22 +169,26 @@ def get_horaires():
             config_changed = False
         schedules_data = schedules_object.__main__()
         data["schedule"] = {}
+        print(schedules_data.keys())
 
         for category in schedules_data.keys() :
+            data['schedule'][category] = []
             for hour in schedules_data[category] :
-                data["schedule"][category] = {
-                    'name':hour.name,
-                    'id':hour.id,
-                    'Carrier':hour.Carrier,
-                    'Operator':hour.Operator,
-                    'PublicCode':hour.PublicCode,
-                    'TypeOfLine':hour.TypeOfLine,
-                    'VehicleType':hour.VehicleType,
-                    'night':hour.night,
-                    'lepiloteId':hour.lepiloteId,
-                    'color':hour.color,
-                    'sqliType':hour.sqliType
-                }
+                data["schedule"][category].append({
+                    'name':hour[0].name,
+                    'id':hour[0].id,
+                    'Carrier':hour[0].Carrier,
+                    'Operator':hour[0].Operator,
+                    'PublicCode':hour[0].PublicCode,
+                    'TypeOfLine':hour[0].TypeOfLine,
+                    'VehicleType':hour[0].VehicleType,
+                    'night':hour[0].night,
+                    'lepiloteId':hour[0].lepiloteId,
+                    'color':hour[0].color,
+                    'sqliType':hour[0].sqliType,
+                    'hour':hour[1],
+                    'isRealTime':hour[2]
+                })
         
         
         return ({"data":data, "content":"Horaires"})

@@ -1,5 +1,4 @@
 var getSchedules = function (fontSize=1) {
-    console.log('qsc')
     getJSON("/get?content=horaires", function(data){
         data = data["data"];
         // Variables initialisation dependingnon the request content
@@ -37,7 +36,11 @@ var getSchedules = function (fontSize=1) {
                         if ( schedule["isRealTime"] ) { 
                             section += " realtime" 
                         }
-                        section += "'>"+schedule["hour"]+"min</span>"
+                        if (schedule['hour'] == 0) {
+                            section += "'>En Vue</span>"
+                        } else {
+                            section += "'>"+schedule["hour"]+"min</span>"
+                        }
                     }
                 } else {
                     section += "Il n'y a pas d'horaires disponibles pour cette catégorie"
@@ -87,6 +90,4 @@ window.cpt = 0;
 onLoad()
 
 
-// pas d'horaires ne fonctionne pas (issue serveur)
-// 509 ne fonctionne pas (ne parvient pas à identifier self.name/id/...)
 // N'affiche pas Internal Server Error si c'est le cas
