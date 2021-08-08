@@ -50,6 +50,10 @@ var getSchedules = function (fontSize=1) {
             section += "</select>"
             document.body.innerHTML = section
         }
+    }, error_handler=function(err){
+        document.body.innerHTML=err;
+        console.log(err);
+        setTimeout(() => {document.location=document.location},1000)
     });
     // On remplace les horaires "0min" par "En Vue"
     for (var i of document.getElementsByClassName('time')) {

@@ -300,7 +300,8 @@ def get_logs():
     with zipfile.ZipFile(data, mode='w') as zf:
         for file in Path(logs_path).rglob('*'): # Cette solution supprime
             zf.write(file, file.name)           # la possibilité d'utiliser des dossiers dans 
-    data.seek(0)                                # les logs, mais ce n'est pas quelque chose de nécessaire
+    data.seek(0)                                # les logs, car elle prend tous les fichiers 
+                                                # sans différencier leur chemin d'accès
 
     return send_file(
         data,
@@ -345,7 +346,11 @@ def view_logs():
 @app.errorhandler(500)
 def server_error_handler(e):
     print("error:",e)
-    return render_template('error_500.html',data=e)
+    print(request.base_url)
+    if request.is_json or request.base_url.split('/')[-1] == "get":
+        return(e)
+    else:
+        return render_template('error_500.html',data=e)
 
 
 # Development option to run tests without internet access
