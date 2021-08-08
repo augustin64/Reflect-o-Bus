@@ -10,52 +10,10 @@
           href="https://fonts.googleapis.com/css?family=Roboto">
     </head>
     <body>
-      <section style="padding-left:5%;">
-        {% if data['total_schedules'] > 0 %}
-          {% for n in data['schedule'].keys() %}
-          <div class="schedule" style="width:{{ 90 // data['schedule']|length }}%;">
-              {% if not data['hide_category'] %}
-              <h3>{{ n }}</h3>
-              {% endif %}
-              {% if data['schedule'][n]|length > 0 %}
-                {% for schedules in data['schedule'][n] %}
-                  <div id="squircle" style="background-color: {{ schedules[0].color }};">
-                    <p>{{ schedules[0].PublicCode }}</p>
-                  </div>
-                  <span class="time {% if schedules[2] %}realtime{% endif %}">{{ schedules[1] }}min</span>
-                {% endfor %}
-              {% else %}
-                Il n'y a pas d'horaires en temps réel disponibles pour cette catégorie
-              {% endif %}
-          </div>
-          {% endfor %}
-        {% else %}
-        <center>
-          Aucun horaire en temps réel n'est disponible,<br/>
-          Configurez cela à l'URL suivante : <a href="http://{{ data['localip'] }}:5000/config">http://{{ data['localip'] }}:5000/config</a>
-        </center>
-        {% endif %}
-        
+      <section style="padding-left:5%;" id="schedules">
       </section>
     </body>
-    <style>
-      :root {
-        background-color:{{ data['background_color']}};
-        {% if 'background_url' in data.keys() %}
-          background-image:url({{ url_for('static',filename='walls/') }}{{ data['background_url'] }});
-        {% endif %}
-      }
-      .realtime {
-        background-image: url({{ url_for('static',filename="src/realtime.gif") }});
-      }
-      .time {
-        font-size: {{ data['font_size']}}rem;
-      }
-    </style>
+
     <script id="mainScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>
-    <script id="pageScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/horaires.js') }}"></script>
-    <script>
-      setTimeout(() => (window.location=window.location), {{ data['refresh_time'] }})
-    </script>
-    
+    <script id="pageScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/horaires.js') }}"></script>    
 </html>

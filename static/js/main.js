@@ -26,11 +26,11 @@ function sendJSON(data,callback){
     xhr.send(data);
 }
 
-var getJSON = function(url, callback) {
+var getJSON = function(url, callback, error_handler=function(err){throw err}) {
     fetch(url)
     .then(res => res.json())
     .then((out) => {
         callback(out);
     })
-    .catch(err => { throw err });
+    .catch(err => { error_handler(err) });
 }
