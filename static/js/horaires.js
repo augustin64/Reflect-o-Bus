@@ -1,6 +1,7 @@
 var getSchedules = function (fontSize=1) {
     getJSON("/get?content=horaires", function(data){
         data = data["data"];
+        shape = data["config"]["shape"];
         // Variables initialisation dependingnon the request content
         var numberOfCategories = Object.keys( data["schedule"] ).length;
         var numberOfSchedules = 0;
@@ -22,7 +23,7 @@ var getSchedules = function (fontSize=1) {
                 }
                 if ( data["schedule"][category].length > 0 ) {
                     for (var schedule of data["schedule"][category]) {
-                        section += "<div id='squircle' style='background-color: "
+                        section += "<div id='"+shape+"' style='background-color: "
                         if (data['config']['pass_colors']) {
                             // We set the squircle color to
                             // the parameters

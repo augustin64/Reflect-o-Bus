@@ -160,6 +160,7 @@ def get_horaires():
     data['config']['pass_colors'] = eval(configParser['ADVANCED']['pass_colors'])
     data['config']['lines_color'] = configParser['ADVANCED']['lines_color']
     data['config']['localip'] = get_ip()
+    data['config']['shape'] = configParser['ADVANCED']['shape']
 
     if not offline :
         global config_changed

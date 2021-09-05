@@ -4,6 +4,7 @@ default_category = Autre
 schedules = 
 
 [ADVANCED]
+shape = squircle
 refresh_time = 15000
 boot_time = 3000
 

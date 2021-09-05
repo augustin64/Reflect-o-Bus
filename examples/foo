@@ -4,6 +4,7 @@ default_category = Autre
 schedules = 9_caillols 7_foch 7T_foch 6_5av
 
 [ADVANCED]
+shape = squircle
 refresh_time = 15000
 boot_time = 3000
 

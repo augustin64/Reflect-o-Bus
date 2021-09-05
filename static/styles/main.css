@@ -25,6 +25,32 @@
       content:'';
 }
 
+#circle {
+    position:relative;
+    margin:.333rem .25rem;
+    border-radius:3rem;
+    text-decoration:none;
+    text-align:center;
+    line-height:3rem;
+    width:3rem;
+    height:3rem;
+    font-size:2rem;
+    transition:color .333s;
+}
+
+#square {
+    position:relative;
+    margin:.333rem .25rem;
+    border-radius:.25rem;
+    text-decoration:none;
+    text-align:center;
+    line-height:3rem;
+    width:3rem;
+    height:3rem;
+    font-size:2rem;
+    transition:color .333s;
+}
+
 .schedule {
       display: inline-block;
       vertical-align: top;
