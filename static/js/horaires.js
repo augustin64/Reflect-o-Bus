@@ -10,7 +10,7 @@ var getSchedules = function (fontSize=1) {
         }
         if (numberOfSchedules == 0) {
             // If no schedules are available, we set te text to this sentence
-            document.body.innerHTML = "<center>Aucun horaire en temps réel n'est disponible,<br/>Configurez cela à l'URL suivante : <a href=\"http://"+data["config"]["localip"]+":5000\">http://"+data["config"]["localip"]+":5000</a></center>";
+            document.body.innerHTML = "<center>Aucun horaire en temps réel n'est disponible,<br/>Configurez cela à l'URL suivante : <a href=\"http://"+data["config"]["localip"]+":"+window.location.port+"\">http://"+data["config"]["localip"]+":"+window.location.port+"</a></center>";
         } else {
             section = "<section style='padding-left:5%;'>"
             for (var category of Object.keys( data["schedule"] ) ) {

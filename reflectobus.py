@@ -1,16 +1,17 @@
 import configparser
 import io
-import os
 import json
-from pathlib import Path, PurePath
+import os
 import socket
 import zipfile
+from pathlib import Path, PurePath
 
 import requests
 from flask import (Flask, make_response, redirect, render_template, request,
-                   url_for, send_file)
+                   send_file, url_for)
 
 from modules import schedules
+from modules import configchecker
 from modules.lepilote import rtm
 
 # On initialise le serveur Flask
@@ -248,9 +249,11 @@ def boot():
     data = {"version":ver,
             "rtm_version":rtm_ver,
             "boot_time":configParser['ADVANCED']['boot_time'],
-            "local_ip":get_ip()
+            "local_ip":get_ip(),
+            "background_color" : configParser['ADVANCED']['background_color'],
+            "port" : configParser['ADVANCED']['port']
     }
-    data['background_color'] = configParser['ADVANCED']['background_color']
+
     return render_template('boot.html', data=data)
 
 @app.route("/horaires")
@@ -371,6 +374,7 @@ configpath = PurePath(home).joinpath('.config/reflect-o-bus/')
 configParser = configparser.ConfigParser()
 configParser.read(configpath.joinpath('config'))
 
+configchecker.check(configpath.joinpath('config'), './examples/default')
 
 # setting custom headers
 headers = {'User-Agent':'Reflect-o-Bus Client', 'From':'https://github.com/augustin64/Reflect-o-Bus'}
