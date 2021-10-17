@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+Vérifie la validité de la configuration actuelle
+en fonction d'un template minimal
+"""
 import configparser
 
 def check(configpath, templatepath):
