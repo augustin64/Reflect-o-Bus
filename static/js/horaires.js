@@ -87,12 +87,7 @@ var loadLook = function() {
     });
 }
 
-var setIP = function() {
-    document.getElementById("ip").innerHTML = '<a href="/">'+document.location.host+"</a>";
-}
-
 var onLoad = function() {
-    setIP();
     getSchedules();
     loadLook()
 }

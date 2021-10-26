@@ -18,6 +18,7 @@
 
 <footer>
   <div id="ip">
+    {{ data["local_ip"] }}{% if data["port"] != "80" %}:{{ data["port"] }}{% endif %}
   </div>
 </footer>
 

@@ -319,7 +319,11 @@ def horaires():
     Renvoie le template des horaires, page noire appelant du javascript
     pour récupérer les horaires
     """
-    return render_template("horaires.html")
+    data = {
+        "local_ip": get_ip(),
+        "port": CONFIG_PARSER["ADVANCED"]["port"],
+    }
+    return render_template("horaires.html", data=data)
 
 
 # not in use yet

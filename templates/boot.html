@@ -12,7 +12,7 @@
     <body style="text-align: center;">
       version: {{ data["version"][:7] }} <br/>
       lepilote API version: {{ data["rtm_version"][:7] }} <br/>
-      Adresse IP : {{ data["local_ip"] }}:{{ data["port"] }} <br/>
+      Adresse IP : {{ data["local_ip"] }}{% if data["port"] != "80" %}:{{ data["port"] }}{% endif %} <br/>
     </body>
 
     <script id="mainScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>
