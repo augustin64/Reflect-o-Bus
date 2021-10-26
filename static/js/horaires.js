@@ -2,6 +2,7 @@ var getSchedules = function (fontSize=1) {
     getJSON("/get?content=horaires", function(data){
         data = data["data"];
         shape = data["config"]["shape"];
+        var workspace = document.getElementById("workspace");
         // Variables initialisation dependingnon the request content
         var numberOfCategories = Object.keys( data["schedule"] ).length;
         var numberOfSchedules = 0;
@@ -10,7 +11,7 @@ var getSchedules = function (fontSize=1) {
         }
         if (numberOfSchedules == 0) {
             // If no schedules are available, we set te text to this sentence
-            document.body.innerHTML = "<center>Aucun horaire en temps réel n'est disponible,<br/>Configurez cela à l'URL suivante : <a href=\"http://"+data["config"]["localip"]+":"+window.location.port+"\">http://"+data["config"]["localip"]+":"+window.location.port+"</a></center>";
+            workspace.innerHTML = "<center>Aucun horaire en temps réel n'est disponible,<br/>Configurez cela à l'URL suivante : <a href=\"http://"+data["config"]["localip"]+":"+window.location.port+"\">http://"+data["config"]["localip"]+":"+window.location.port+"</a></center>";
         } else {
             section = "<section style='padding-left:5%;'>"
             for (var category of Object.keys( data["schedule"] ) ) {
@@ -49,10 +50,10 @@ var getSchedules = function (fontSize=1) {
                 section += "</div>"
             }
             section += "</select>"
-            document.body.innerHTML = section
+            workspace.innerHTML = section
         }
     }, error_handler=function(err){
-        document.body.innerHTML=err;
+        workspace.innerHTML=err;
         console.log(err);
         setTimeout(() => {document.location=document.location},1000)
     });
@@ -86,7 +87,12 @@ var loadLook = function() {
     });
 }
 
+var setIP = function() {
+    document.getElementById("ip").innerHTML = '<a href="/">'+document.location.host+"</a>";
+}
+
 var onLoad = function() {
+    setIP();
     getSchedules();
     loadLook()
 }

@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Reflect'o Bus - Horaires</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width"/>
-        <link href="{{ url_for('static',filename='styles/main.css') }}" rel="stylesheet">
-        <link href="{{ url_for('static',filename='styles/mirror.css') }}" rel="stylesheet">
-        <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Roboto">
-    </head>
-    <body>
-      <section style="padding-left:5%;" id="schedules">
-      </section>
-    </body>
+<head>
+    <title>Reflect'o Bus - Horaires</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width"/>
+    <link href="{{ url_for('static',filename='styles/main.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='styles/mirror.css') }}" rel="stylesheet">
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto">
+</head>
+<body>
+  <div id="workspace">
+    <section style="padding-left:5%;" id="schedules">
+    </section>
+  </div>
+</body>
 
-    <script id="mainScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>
-    <script id="pageScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/horaires.js') }}"></script>    
+<footer>
+  <div id="ip">
+  </div>
+</footer>
+
+<script id="mainScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/main.js') }}"></script>
+<script id="pageScript" language="JavaScript" type="text/javascript" src="{{ url_for('static',filename='js/horaires.js') }}"></script>
 </html>
