@@ -66,7 +66,7 @@ var getSchedules = function (fontSize=1) {
 var loadLook = function() {
     getJSON("/get?content=look", function(data){
         data = data["data"];
-        
+        var workspace = document.getElementById("workspace");
         if (typeof data["background_url"] != "undefined") {
             document.body.style.background = "url(/static/walls/"+data["background_url"]+")";
         } else {
@@ -74,7 +74,7 @@ var loadLook = function() {
         }
         document.body.style.backgroundColor = data["background_color"];
         
-        for (element of document.getElementsByClassName("time")) {
+        for (element of workspace.getElementsByClassName("time")) {
             element.style.fontSize = data["font_size"]+"rem";
         }
         if (window.cpt == 3) {
