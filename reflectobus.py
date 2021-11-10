@@ -159,7 +159,7 @@ def reload_config():
     global CONFIG_CHANGED
     global CONFIG_PARSER
     CONFIG_CHANGED = True
-    CONFIG_PARSER = CONFIG_PARSER.ConfigParser()
+    CONFIG_PARSER = configparser.ConfigParser()
     CONFIG_PARSER.read(configpath.joinpath("config"))
 
 
@@ -235,8 +235,8 @@ def get_look():
     """
     data = {
         "background_color": CONFIG_PARSER["ADVANCED"]["background_color"],
-        "font_size": (CONFIG_PARSER["ADVANCED"]["font_size"] == "True"),
-        "refresh_time": (CONFIG_PARSER["ADVANCED"]["refresh_time"] == "True"),
+        "font_size": (CONFIG_PARSER["ADVANCED"]["font_size"]),
+        "refresh_time": (CONFIG_PARSER["ADVANCED"]["refresh_time"]),
     }
     if CONFIG_PARSER["ADVANCED"]["background_type"] == "image":
         data["background_url"] = CONFIG_PARSER["ADVANCED"]["background_url"]
