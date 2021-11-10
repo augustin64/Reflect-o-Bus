@@ -5,12 +5,13 @@ en fonction d'un template minimal
 """
 import configparser
 
+
 def check(configpath, templatepath):
     """
     Vérifie la validité de la configuration actuelle
     en fonction d'un template minimal
     """
-    config= configparser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read(configpath)
 
     template = configparser.ConfigParser()
@@ -28,7 +29,7 @@ def check(configpath, templatepath):
                 print(f"{configpath} : pas d'entrée pour '{option}'")
                 modified = True
 
-    if modified :
-        with open(configpath, 'w') as configfile:
+    if modified:
+        with open(configpath, "w") as configfile:
             config.write(configfile)
         print(f"{configpath} : Ajout des champs manquants")
